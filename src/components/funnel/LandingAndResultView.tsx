@@ -1186,7 +1186,7 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-[#57534E] font-semibold">
-                    Parcele em até 12x no cartão
+                    Parcele em até 8x no cartão
                   </p>
                 </div>
 
