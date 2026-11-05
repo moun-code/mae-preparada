@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segundos que Salvam | Quiz Interativo + Guia Prático — Mãe Preparada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --indigo-700: #2C303B;
+      --indigo-800: #1A1C22;
+      --indigo-900: #121316;
+      --mint-400: #FF2B44;
+      --lavender-50: #F8F9FA;
+      --lavender-100: #F1F3F6;
+      --ink-muted: #667085;
+      --emergency-600: #FF2B44;
+    }
+    html, body {
+      scroll-behavior: smooth;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--lavender-50);
+      color: var(--indigo-900);
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    .em-mint {
+      position: relative;
+      display: inline-block;
+      font-style: normal;
+      font-weight: 800;
+      color: #FF2B44;
+      padding: 0 4px;
+      z-index: 0;
+    }
+    .em-mint::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      height: 35%;
+      background: #FF2B44;
+      opacity: 0.15;
+      z-index: -1;
+      border-radius: 3px;
+    }
+    .em-mint-dark {
+      position: relative;
+      display: inline-block;
+      font-style: normal;
+      font-weight: 800;
+      color: #fff;
+      padding: 0 4px;
+      z-index: 0;
+    }
+    .em-mint-dark::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      height: 35%;
+      background: #FF2B44;
+      opacity: 0.35;
+      z-index: -1;
+      border-radius: 3px;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-fade-up {
+      animation: fadeUp 240ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .animate-spin-slow {
+      animation: spinSlow 22s linear infinite;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-up, .animate-spin-slow { animation: none !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#F8F9FA] text-[#121316] antialiased selection:bg-[#FF2B44] selection:text-white">
+
+  <!-- BARRA DE NAVEGAÇÃO RÁPIDA DO FUNIL (Estética Clínica/Saúde: Fundo Vermelho Bem Clarinho) -->
+  <div class="bg-[#FFF0F2] text-[#9F1239] text-xs py-2 px-4 flex flex-wrap items-center justify-between gap-2 border-b border-[#FECDD3] sticky top-0 z-50">
+    <div class="flex items-center gap-2 font-bold">
+      <span class="w-2 h-2 rounded-full bg-[#FF2B44]"></span>
+      <span>Visualização do Funil (Estética Clínica):</span>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="switchView('quiz')" id="btn-nav-quiz" class="px-3 py-1 rounded-full font-extrabold bg-[#FF2B44] text-white transition-all shadow-sm">
+        1. Quiz Interativo (/quiz)
+      </button>
+      <button onclick="switchView('resultado')" id="btn-nav-lp" class="px-3 py-1 rounded-full font-bold bg-white text-[#9F1239] border border-[#FECDD3] hover:bg-[#FFF0F2] transition-all">
+        2. Resultado + Landing Page (/resultado)
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       VISÃO 1: QUIZ INTERATIVO (/quiz)
+       ======================================================================== -->
+  <div id="view-quiz" class="min-h-[calc(100dvh-40px)] flex flex-col justify-between">
+    <!-- Header do Quiz -->
+    <header class="w-full bg-white/95 backdrop-blur border-b border-[#FECDD3] shadow-[0_1px_3px_rgba(0,0,0,0.04)] sticky top-0 z-30">
+      <div class="max-w-xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <button id="quiz-back-btn" onclick="quizBack()" class="hidden w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FFF0F2] text-[#121316] border border-[#FECDD3] items-center justify-center hover:bg-[#FF2B44] hover:text-white transition-all font-bold shadow-sm active:scale-95 shrink-0" aria-label="Voltar">
+            ←
+          </button>
+          <div class="flex items-center gap-2.5 font-extrabold text-sm sm:text-base text-[#121316]">
+            <img src="public/images/logo_v1_mae_preparada.webp" onerror="this.onerror=null; this.src='images/logo_v1_mae_preparada.webp';" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-contain shadow-sm shrink-0" />
+            <span class="tracking-tight">Mãe Preparada</span>
+          </div>
+        </div>
+        <div id="quiz-counter-badge" class="text-xs sm:text-sm font-extrabold text-[#667085] px-3 py-1 rounded-full bg-[#FFF0F2] border border-[#FECDD3]">
+          Diagnóstico Rápido · 2 min
+        </div>
+      </div>
+      <div class="w-full h-2 bg-[#F1F3F6] overflow-hidden">
+        <div id="quiz-progress-bar" class="h-full bg-[#FF2B44] transition-all duration-300" style="width: 6%"></div>
+      </div>
+    </header>
+
+    <!-- Conteúdo Central Dinâmico do Quiz -->
+    <main class="flex-1 flex flex-col justify-center w-full max-w-xl mx-auto px-4 py-4">
+      <div id="quiz-stage-container"></div>
+    </main>
+
+    <!-- Rodapé de aviso médico -->
+    <footer class="w-full py-2.5 px-4 bg-white/80 border-t border-[#3A2390]/10 text-center">
+      <p class="max-w-xl mx-auto text-[11px] font-semibold text-[#5A5683] opacity-80">
+        Este guia traz orientações gerais de primeiros socorros e não substitui curso prático nem atendimento médico. Em emergência, ligue 192.
+      </p>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       VISÃO 2: RESULTADO + LANDING PAGE ILUSTRADA (/resultado e /guia)
+       ======================================================================== -->
+  <div id="view-lp" class="hidden">
+    <!-- Barra topo: Vermelho bem clarinho clínica/saúde -->
+    <div class="bg-[#FFF0F2] text-[#9F1239] text-xs font-bold py-2 px-4 text-center border-b border-[#FECDD3]">
+      Guia ilustrado · Acesso imediato · Garantia de 7 dias
+    </div>
+
+    <!-- Header da LP: quase branco sólido com sutil blur -->
+    <header class="bg-white/[0.98] backdrop-blur-sm border-b border-[#FECDD3] shadow-[0_1px_3px_rgba(0,0,0,0.03)] sticky top-9 z-40">
+      <div class="max-w-[1160px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <img src="public/images/logo_v1_mae_preparada.webp" onerror="this.onerror=null; this.src='images/logo_v1_mae_preparada.webp';" alt="Logo" class="w-9 h-9 rounded-xl object-contain shadow-sm" />
+          <div class="leading-tight">
+            <span class="block font-extrabold text-base text-[#121316]">Mãe Preparada</span>
+            <span class="block text-[11px] font-semibold text-[#667085]">Preparo que acalma</span>
+          </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-1 p-1 rounded-full bg-white border border-[#FECDD3] text-xs font-bold">
+          <a href="#s4" class="px-3.5 py-1.5 rounded-full bg-[#FFF0F2] text-[#FF2B44]">O guia</a>
+          <a href="#s6" class="px-3.5 py-1.5 rounded-full text-[#667085] hover:text-[#FF2B44]">35 situações</a>
+          <a href="#s14" class="px-3.5 py-1.5 rounded-full text-[#667085] hover:text-[#FF2B44]">Dúvidas</a>
+        </nav>
+        <button onclick="goToCheckout('header')" class="inline-flex items-center gap-2.5 rounded-full bg-[#FF2B44] text-white font-extrabold text-xs sm:text-sm pl-4 pr-2 py-1.5 shadow-sm hover:brightness-95 transition">
+          <span>Quero o guia</span>
+          <span class="w-7 h-7 rounded-full bg-white/20 text-white flex items-center justify-center">↗</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- BLOCO DE DIAGNÓSTICO DO QUIZ NO TOPO DA LP (Fundo vermelho clarinho clínica) -->
+    <section class="pt-6 pb-8 px-4 sm:px-6 bg-gradient-to-b from-[#FFF0F2] to-[#FFF9FA] border-b border-[#FECDD3]">
+      <div class="max-w-[1160px] mx-auto space-y-6">
+        <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] text-[#121316] p-6 sm:p-8 shadow-soft">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <div class="lg:col-span-4 flex flex-col items-center text-center">
+              <div class="relative w-32 h-32 flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="#FECDD3" stroke-width="10" />
+                  <circle id="res-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="#FF2B44" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="117" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span id="res-score-badge" class="text-2xl sm:text-3xl font-extrabold text-[#FF2B44]">5 de 8</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-[#667085]">Acertos</span>
+                </div>
+              </div>
+            </div>
+            <div class="lg:col-span-8 space-y-2.5">
+              <span class="inline-block px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold uppercase shadow-sm">Seu Diagnóstico Personalizado</span>
+              <h2 id="res-headline" class="text-xl sm:text-3xl font-extrabold text-[#121316]">Você acertou 5 de 8 situações.</h2>
+              <p id="res-band-text" class="text-sm sm:text-base text-[#44403C] leading-relaxed font-medium">
+                Você sabe parte, e a parte que falta pesa. Mesmo nas que acertou, saber a resposta não é o mesmo que executar sob pressão: no susto, o nervosismo apaga a memória.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cartões de Situações para Revisar em Dropcard -->
+        <div id="res-wrong-cards-wrapper" class="mt-8 sm:mt-12 space-y-4">
+          <div class="space-y-1">
+            <h3 class="text-xl sm:text-2xl font-extrabold text-[#121316]">Suas principais lacunas para revisar agora:</h3>
+            <p class="text-sm sm:text-base text-[#44403C] font-medium">Toque em cada situação para ver os detalhes e a conduta recomendada pelas diretrizes:</p>
+          </div>
+          <div id="res-wrong-cards" class="space-y-3"></div>
+
+          <!-- Botão de Compartilhar no WhatsApp -->
+          <div class="rounded-2xl bg-white border-2 border-[#FECDD3] p-5 sm:p-7 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 shadow-soft">
+            <p class="text-sm sm:text-base md:text-lg font-extrabold text-[#121316] leading-snug max-w-xl">
+              Quer testar se quem convive com seu(sua) filho(a) também saberia agir?
+            </p>
+            <div class="flex flex-wrap items-center gap-3 shrink-0 w-full sm:w-auto">
+              <button onclick="shareCaregiver()" class="min-h-[52px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#F0FDF4] hover:bg-[#DCFCE7] border-2 border-[#22C55E] text-[#15803D] font-extrabold text-sm sm:text-base shadow-sm hover:shadow-md transition shrink-0 w-full sm:w-auto">
+                <svg class="w-5 h-5 text-[#15803D]" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.06-1.107-.074-.27-.087-.61-.205-1.05-.395-1.855-.804-3.076-2.696-3.169-2.82-.093-.124-.757-1.008-.757-1.924 0-.916.48-1.367.652-1.554.172-.187.375-.234.5-.234.125 0 .25.002.359.007.115.006.269-.043.421.323.157.377.536 1.309.583 1.405.047.096.078.209.016.333-.062.125-.094.203-.187.312-.094.11-.197.246-.282.33-.094.094-.192.196-.083.383.11.188.488.805 1.047 1.303.719.642 1.325.842 1.513.935.188.094.297.078.406-.047.11-.125.469-.547.594-.734.125-.188.25-.156.422-.094.172.062 1.094.516 1.281.609.188.094.313.141.359.219.047.078.047.453-.097.858z"/></svg>
+                <span>Mandar o teste no WhatsApp</span>
+                <span class="text-[#15803D]">↗</span>
+              </button>
+              <button onclick="switchView('quiz')" class="min-h-[46px] inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-xs sm:text-sm font-extrabold text-[#57534E] hover:text-[#FF2B44] hover:bg-[#FFF0F2] transition">
+                <span>↻ Refazer teste</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO (s1) -->
+    <section id="s1" class="py-10 sm:py-14 px-4 sm:px-6">
+      <div class="max-w-[1160px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-6 space-y-5">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF0FF] text-[#2A1A73] text-xs font-extrabold">
+            ✦ Um guia Mãe Preparada
+          </span>
+          <h1 id="hero-h1" class="font-extrabold text-[#2A1A73] tracking-tight leading-[1.08] text-3xl sm:text-5xl">
+            Nos primeiros minutos de uma emergência, saiba o <span class="em-mint">quê</span> fazer antes de precisar.
+          </h1>
+          <p class="text-base sm:text-[17px] text-[#5A5683] leading-relaxed font-medium">
+            <strong class="text-[#2A1A73] font-extrabold">Segundos que Salvam</strong> é o guia ilustrado que mostra o que fazer — e o que <strong class="text-[#D62839]">NÃO fazer</strong> — em engasgo, queimadura, convulsão, afogamento e mais de 30 situações. Em toda página: <strong class="text-[#2A1A73]">calma, ligar 192, agir.</strong>
+          </p>
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+            <button onclick="goToCheckout('hero')" class="inline-flex items-center justify-between gap-3 rounded-full bg-[#6EF0B9] text-[#2A1A73] font-extrabold text-base pl-6 pr-2.5 py-2.5 shadow-lg hover:brightness-95 transition">
+              <span>Quero o guia agora</span>
+              <span class="w-9 h-9 rounded-full bg-[#2A1A73] text-[#6EF0B9] flex items-center justify-center">↗</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs font-bold">
+            <div class="bg-white p-2.5 rounded-xl border border-[#3A2390]/10 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-[#6EF0B9] flex items-center justify-center">✓</span> Ilustrado estilo manual
+            </div>
+            <div class="bg-white p-2.5 rounded-xl border border-[#3A2390]/10 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-[#6EF0B9] flex items-center justify-center">✓</span> Acha em 2 toques (offline)
+            </div>
+            <div class="bg-white p-2.5 rounded-xl border border-[#3A2390]/10 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-[#6EF0B9] flex items-center justify-center">✓</span> Passo a passo visual direto
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockup Ilustrado + Selo Girando -->
+        <div class="lg:col-span-6 relative pt-4">
+          <div class="absolute -top-2 -left-2 z-20 w-28 h-28 rounded-full bg-[#2A1A73] border-4 border-white shadow-xl flex items-center justify-center">
+            <svg viewBox="0 0 120 120" class="w-full h-full p-1 animate-spin-slow">
+              <defs><path id="sealPath" d="M 60, 60 m -44, 0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" /></defs>
+              <text fill="#6EF0B9" font-size="8.2" font-weight="800" letter-spacing="1.3px">
+                <textPath href="#sealPath">BASEADO EM DIRETRIZES PÚBLICAS • SBP • MINISTÉRIO DA SAÚDE • AHA •</textPath>
+              </text>
+            </svg>
+            <div class="absolute w-10 h-10 rounded-full bg-[#6EF0B9] text-[#2A1A73] flex items-center justify-center font-extrabold text-sm">✓</div>
+          </div>
+
+          <!-- Cartão Mockup do Guia -->
+          <div class="rounded-[28px] bg-gradient-to-br from-[#EEF0FF] via-white to-[#EEF0FF] p-5 sm:p-6 border-2 border-[#3A2390]/15 shadow-xl">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#3A2390]/10">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#D62839]"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#6EF0B9]"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#3A2390]"></span>
+                <span class="ml-2 text-xs sm:text-sm font-extrabold text-[#121316] tracking-tight">Segundos que salvam</span>
+              </div>
+              <span class="px-2.5 py-1 rounded-full bg-[#D62839] text-white text-[11px] font-extrabold tracking-wide">📞 192 VIVA-VOZ</span>
+            </div>
+            <!-- Imagem do Produto: foto_vitrine_guia_segundosquesalvam.webp -->
+            <div class="w-full overflow-hidden rounded-2xl border border-[#3A2390]/15 bg-white shadow-sm flex items-center justify-center p-1 sm:p-2">
+              <img src="public/images/foto_vitrine_guia_segundosquesalvam.webp" onerror="this.onerror=null; this.src='images/foto_vitrine_guia_segundosquesalvam.webp';" alt="Foto Vitrine Guia Segundos que Salvam" class="w-full h-auto object-contain rounded-xl select-none" loading="eager" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AS 35 SITUAÇÕES ORGANIZADAS (s6) -->
+    <section id="s6" class="py-12 px-4 sm:px-6">
+      <div class="max-w-[1160px] mx-auto space-y-8">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-[#121316]">As 35 situações <span class="em-mint">organizadas</span> por cor e tema.</h2>
+          <p class="text-sm sm:text-base text-[#667085]">Dividido em 4 grandes categorias de emergência:</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] p-6 sm:p-7 space-y-4 shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FFF0F2] border border-[#FECDD3] flex items-center justify-center p-2.5 shrink-0 shadow-xs">
+                  <img src="public/images/icones/icone_pulmao.svg" onerror="this.onerror=null; this.src='images/icones/icone_pulmao.svg';" alt="" class="w-7 h-7 object-contain" />
+                </div>
+                <h3 class="text-xl font-extrabold text-[#FF2B44]">A · Asfixia e Respiração</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold shadow-sm shrink-0">10 situações</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#44403C] font-medium leading-relaxed">Engasgo, RCP, afogamento, falta de ar…</p>
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-[#FECDD3]">
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Engasgo grave no(a) bebê</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Engasgo em criança</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Tosse com leite e água</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ RCP no(a) bebê e criança</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Sono seguro e sufocamento</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Afogamento silencioso</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Crise de falta de ar</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Posição lateral de segurança</span>
+            </div>
+          </div>
+          <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] p-6 sm:p-7 space-y-4 shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FFF0F2] border border-[#FECDD3] flex items-center justify-center p-2.5 shrink-0 shadow-xs">
+                  <img src="public/images/icones/icone_bandeide.svg" onerror="this.onerror=null; this.src='images/icones/icone_bandeide.svg';" alt="" class="w-7 h-7 object-contain" />
+                </div>
+                <h3 class="text-xl font-extrabold text-[#FF2B44]">B · Traumas e Lesões</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold shadow-sm shrink-0">7 situações</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#44403C] font-medium leading-relaxed">Queda com pancada na cabeça, fraturas, hemorragia, olhos…</p>
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-[#FECDD3]">
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Queda e batida na cabeça</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Pescoço e coluna</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Fraturas e luxações</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Hemorragia e cortes</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Sangramento nasal</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Esmagamento de dedos</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Trauma ocular</span>
+            </div>
+          </div>
+          <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] p-6 sm:p-7 space-y-4 shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FFF0F2] border border-[#FECDD3] flex items-center justify-center p-2.5 shrink-0 shadow-xs">
+                  <img src="public/images/icones/icone_chama.svg" onerror="this.onerror=null; this.src='images/icones/icone_chama.svg';" alt="" class="w-7 h-7 object-contain" />
+                </div>
+                <h3 class="text-xl font-extrabold text-[#FF2B44]">C · Acidentes Domésticos</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold shadow-sm shrink-0">8 situações</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#44403C] font-medium leading-relaxed">Queimaduras, choque elétrico, intoxicação, pilhas e ímãs…</p>
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-[#FECDD3]">
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Queimadura térmica</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Queimadura química/elétrica</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Choque elétrico</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Intoxicação (limpeza e remédios)</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Pilhas-botão e ímãs</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Objetos engolidos</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Objeto no nariz e ouvido</span>
+            </div>
+          </div>
+          <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] p-6 sm:p-7 space-y-4 shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-[#FFF0F2] border border-[#FECDD3] flex items-center justify-center p-2.5 shrink-0 shadow-xs">
+                  <img src="public/images/icones/icone_termometro.svg" onerror="this.onerror=null; this.src='images/icones/icone_termometro.svg';" alt="" class="w-7 h-7 object-contain" />
+                </div>
+                <h3 class="text-xl font-extrabold text-[#FF2B44]">D · Clínicas e Externas</h3>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold shadow-sm shrink-0">10 situações</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#44403C] font-medium leading-relaxed">Convulsão febril, febre alta, desidratação, alergia grave, picadas…</p>
+            <div class="flex flex-wrap gap-2 pt-2 border-t border-[#FECDD3]">
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Convulsão com febre</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Febre alta</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Desidratação</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Alergia grave (anafilaxia)</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Picadas de abelha/vespa</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Escorpião e aranha</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Picada de cobra</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Mordida de animais</span>
+              <span class="px-3 py-1.5 rounded-xl bg-[#FFF0F2] text-[#1C1917] text-xs font-bold border border-[#FECDD3]">✓ Insolação</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8.10 REDE DE APOIO (s9) -->
+    <section id="s9" class="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-[#FECDD3]">
+      <div class="max-w-[1160px] mx-auto">
+        <div class="max-w-4xl mx-auto rounded-[28px] bg-[#FFF0F2] p-6 sm:p-8 border-2 border-[#FECDD3] flex flex-col md:flex-row items-center justify-between gap-6 shadow-soft">
+          <div class="space-y-1.5 text-center md:text-left">
+            <div class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-[#FF2B44]">
+              ♥ Para avó, pai e babá
+            </div>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-[#121316]">
+              Você não está sempre lá. O <span class="em-mint">guia</span> está.
+            </h3>
+            <p class="text-sm text-[#44403C] max-w-lg font-medium leading-relaxed">
+              Envie o guia para quem fica com seu(sua) filho(a) e deixe as orientações de emergência sempre acessíveis.
+            </p>
+          </div>
+          <button onclick="shareGuideCaregiver()" class="min-h-[50px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full bg-[#FF2B44] hover:bg-[#E02438] text-white font-extrabold text-sm sm:text-base shadow-sm hover:shadow-md transition shrink-0 w-full sm:w-auto">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.06-1.107-.074-.27-.087-.61-.205-1.05-.395-1.855-.804-3.076-2.696-3.169-2.82-.093-.124-.757-1.008-.757-1.924 0-.916.48-1.367.652-1.554.172-.187.375-.234.5-.234.125 0 .25.002.359.007.115.006.269-.043.421.323.157.377.536 1.309.583 1.405.047.096.078.209.016.333-.062.125-.094.203-.187.312-.094.11-.197.246-.282.33-.094.094-.192.196-.083.383.11.188.488.805 1.047 1.303.719.642 1.325.842 1.513.935.188.094.297.078.406-.047.11-.125.469-.547.594-.734.125-.188.25-.156.422-.094.172.062 1.094.516 1.281.609.188.094.313.141.359.219.047.078.047.453-.097.858z"/></svg>
+            <span>Enviar para quem cuida dele(a)</span>
+            <span class="text-white">↗</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8.11 QUEM ESTÁ POR TRÁS DO GUIA + FONTES OFICIAIS (s10) -->
+    <section id="s10" class="py-12 sm:py-16 px-4 sm:px-6">
+      <div class="max-w-[1160px] mx-auto space-y-8">
+        <!-- Card Dra. Patrícia Costa (Foto fora do bloco de texto, colada e ampliada no mobile com corte mínimo para enquadramento perfeito) -->
+        <div class="flex flex-col lg:flex-row items-stretch rounded-[28px] overflow-hidden border-2 border-[#FECDD3] shadow-soft bg-white">
+          <div class="relative w-full lg:w-5/12 aspect-[4/5] sm:aspect-[4/5] max-h-[560px] lg:max-h-none lg:aspect-auto lg:h-auto min-h-[380px] lg:min-h-[480px] bg-[#FFF0F2] border-b-2 lg:border-b-0 lg:border-r-2 border-[#FECDD3] shrink-0 overflow-hidden">
+            <img src="public/images/dr_patricia_costa_mae_preparada.webp" onerror="this.onerror=null; this.src='images/dr_patricia_costa_mae_preparada.webp';" alt="Dra. Patrícia Costa" class="w-full h-full object-cover object-top" />
+            <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10">
+              <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-xs border border-[#FECDD3] text-xs font-extrabold text-[#FF2B44] shadow-sm">
+                ✓ Revisão Médica e Especializada
+              </div>
+            </div>
+          </div>
+          <div class="flex-1 bg-white text-[#121316] p-6 sm:p-9 lg:p-10 flex flex-col justify-center space-y-4 text-left">
+            <span class="inline-block self-start px-3.5 py-1.5 rounded-full bg-[#FFF0F2] text-[#FF2B44] border border-[#FECDD3] text-xs font-extrabold uppercase tracking-wider shadow-xs">
+              Quem está por trás do guia
+            </span>
+            <div>
+              <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#121316] tracking-tight">
+                Dra. Patrícia Costa
+              </h2>
+              <p class="mt-1 text-sm sm:text-base font-bold text-[#FF2B44]">
+                Médica Pediatra com especialidade em crianças pequenas e especialista em segurança infantil
+              </p>
+            </div>
+            <p class="text-sm sm:text-base text-[#44403C] leading-relaxed font-medium">
+              Com ampla vivência no acompanhamento de bebês e na orientação de famílias, a Dra. Patrícia Costa reuniu sua experiência para que cada conduta deste guia seja rigorosamente validada, fundamentada na medicina baseada em evidências e desenhada para ação rápida.
+            </p>
+            <p class="text-sm sm:text-base text-[#44403C] leading-relaxed font-medium italic bg-[#FFF0F2]/60 p-4 rounded-2xl border border-[#FECDD3]">
+              “Na hora da emergência, nenhum pai ou mãe consegue ler parágrafos densos ou manuais técnicos. O Segundos que Salvam foi estruturado para você bater o olho e ter a certeza absoluta de como agir nos primeiros minutos.”
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <div class="flex items-center gap-2.5 p-3 rounded-xl bg-[#FFF0F2] border border-[#FECDD3] text-xs sm:text-sm font-bold text-[#121316]">
+                <span class="w-5 h-5 rounded-full bg-[#FF2B44] text-white flex items-center justify-center shrink-0 text-xs">✓</span>
+                <span>Foco em bebês e primeira infância</span>
+              </div>
+              <div class="flex items-center gap-2.5 p-3 rounded-xl bg-[#FFF0F2] border border-[#FECDD3] text-xs sm:text-sm font-bold text-[#121316]">
+                <span class="w-5 h-5 rounded-full bg-[#FF2B44] text-white flex items-center justify-center shrink-0 text-xs">✓</span>
+                <span>Passo a passo visual e direto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco separado: Fontes Oficiais e Organizações -->
+        <div class="rounded-[28px] bg-white border-2 border-[#FECDD3] p-6 sm:p-9 shadow-soft space-y-6">
+          <div class="max-w-2xl mx-auto text-center space-y-2">
+            <span class="inline-block px-3.5 py-1.5 rounded-full bg-[#FFF0F2] text-[#FF2B44] border border-[#FECDD3] text-xs font-extrabold uppercase tracking-wider shadow-xs">
+              Diretrizes Oficiais e Internacionais
+            </span>
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-[#121316] tracking-tight">
+              Baseado nas fontes que os hospitais e pediatras confiam
+            </h3>
+            <p class="text-sm sm:text-base text-[#57534E] leading-relaxed font-medium">
+              Todo o conteúdo do guia foi sintetizado e alinhado aos protocolos públicos das principais autoridades de saúde e atendimento de emergência:
+            </p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="https://www.sbp.com.br/" target="_blank" rel="noopener noreferrer" class="p-4 sm:p-5 rounded-2xl bg-[#FFF0F2] hover:bg-[#FFE4E8] border border-[#FECDD3] transition-all block group shadow-xs">
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-extrabold text-sm sm:text-base text-[#121316] group-hover:text-[#FF2B44] transition-colors">Sociedade Brasileira de Pediatria (SBP)</span>
+                <span class="text-xs font-extrabold text-[#FF2B44]">↗</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#57534E] leading-snug mt-1.5 font-medium">Manuais de Prevenção de Acidentes e Primeiros Socorros na Infância</p>
+            </a>
+            <a href="https://www.gov.br/saude/" target="_blank" rel="noopener noreferrer" class="p-4 sm:p-5 rounded-2xl bg-[#FFF0F2] hover:bg-[#FFE4E8] border border-[#FECDD3] transition-all block group shadow-xs">
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-extrabold text-sm sm:text-base text-[#121316] group-hover:text-[#FF2B44] transition-colors">Ministério da Saúde / SAMU 192</span>
+                <span class="text-xs font-extrabold text-[#FF2B44]">↗</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#57534E] leading-snug mt-1.5 font-medium">Protocolos de Suporte Básico de Vida e Lei Lucas (Lei nº 13.722)</p>
+            </a>
+            <a href="https://cpr.heart.org/" target="_blank" rel="noopener noreferrer" class="p-4 sm:p-5 rounded-2xl bg-[#FFF0F2] hover:bg-[#FFE4E8] border border-[#FECDD3] transition-all block group shadow-xs">
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-extrabold text-sm sm:text-base text-[#121316] group-hover:text-[#FF2B44] transition-colors">American Heart Association (AHA) / ERC</span>
+                <span class="text-xs font-extrabold text-[#FF2B44]">↗</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#57534E] leading-snug mt-1.5 font-medium">Diretrizes de RCP e Atendimento Cardiovascular de Emergência Pediátrica</p>
+            </a>
+            <a href="https://www.gov.br/anvisa/" target="_blank" rel="noopener noreferrer" class="p-4 sm:p-5 rounded-2xl bg-[#FFF0F2] hover:bg-[#FFE4E8] border border-[#FECDD3] transition-all block group shadow-xs">
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-extrabold text-sm sm:text-base text-[#121316] group-hover:text-[#FF2B44] transition-colors">Anvisa / RENACIAT (0800 722 6001)</span>
+                <span class="text-xs font-extrabold text-[#FF2B44]">↗</span>
+              </div>
+              <p class="text-xs sm:text-sm text-[#57534E] leading-snug mt-1.5 font-medium">Orientações Nacionais de Intoxicações Domésticas Agudas</p>
+            </a>
+          </div>
+          <p class="text-center text-[11px] sm:text-xs text-[#78716C] font-medium pt-3 border-t border-[#FECDD3]">
+            * Baseado em diretrizes públicas oficiais para profissionais de saúde e socorristas. Não há vínculo comercial ou endosso direto destas entidades ao material.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTOS E AVALIAÇÕES (s11) -->
+    <section id="s11" class="py-14 sm:py-20 px-4 sm:px-6 bg-[#FFF9FA] border-t border-[#FECDD3] overflow-hidden">
+      <div class="max-w-6xl mx-auto">
+        <!-- Header de Avaliação / Trust -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12 text-center">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#FECDD3] shadow-xs">
+            <span class="text-amber-400 text-sm tracking-widest font-black">★★★★★</span>
+            <span class="text-xs font-extrabold text-[#1C1917]">4.9 de 5 estrelas</span>
+          </div>
+          <span class="hidden sm:inline text-xs text-[#A8A29E]">•</span>
+          <span class="text-xs sm:text-sm font-semibold text-[#57534E]">
+            Mais de <strong class="text-[#1C1917] font-bold">1.200 famílias</strong> preparadas e tranquilas
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <!-- Coluna Esquerda -->
+          <div class="lg:col-span-4 space-y-4 sm:space-y-6">
+            <div class="w-12 h-12 rounded-2xl bg-[#FFF0F2] border border-[#FECDD3] flex items-center justify-center text-[#FF2B44] text-3xl font-serif shadow-xs">
+              “
+            </div>
+            <div class="space-y-2.5">
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1C1917] tracking-tight leading-tight">
+                O que outras mães estão dizendo
+              </h2>
+              <p class="text-xs sm:text-sm text-[#57534E] leading-relaxed font-medium">
+                Relatos reais de mães que hoje têm no celular o passo a passo direto para agir com calma e segurança em qualquer imprevisto com seus pequenos.
+              </p>
+            </div>
+            <div class="pt-2 flex items-center gap-3 sm:gap-4">
+              <button onclick="document.getElementById('testimonials-scroll').scrollBy({ left: -340, behavior: 'smooth' })" class="w-10 h-10 rounded-full border border-[#FECDD3] bg-white text-[#1C1917] hover:bg-[#FFF0F2] hover:text-[#FF2B44] transition flex items-center justify-center shadow-xs active:scale-95 cursor-pointer shrink-0">
+                ←
+              </button>
+              <div class="flex-1 max-w-[140px] sm:max-w-[180px] h-1.5 bg-[#FCE7EB] rounded-full overflow-hidden">
+                <div id="testimonials-prog" class="h-full bg-[#FF2B44] rounded-full w-1/3 transition-all"></div>
+              </div>
+              <button onclick="document.getElementById('testimonials-scroll').scrollBy({ left: 340, behavior: 'smooth' })" class="w-10 h-10 rounded-full border border-[#FECDD3] bg-white text-[#1C1917] hover:bg-[#FFF0F2] hover:text-[#FF2B44] transition flex items-center justify-center shadow-xs active:scale-95 cursor-pointer shrink-0">
+                →
+              </button>
+            </div>
+            <p class="text-[11px] text-[#A8A29E] font-medium lg:hidden">
+              Deslize para o lado para ver mais depoimentos →
+            </p>
+          </div>
+
+          <!-- Coluna Direita (Carrossel de Balões) -->
+          <div class="lg:col-span-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div id="testimonials-scroll" class="flex gap-4 sm:gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none]">
+              <!-- Card 1 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “Gente, eu tava com medo de ser aquele material cheio de texto que ninguém lê. Mas não! Abri no celular, procurei a situação e em dois toques já tava na página certa. É tudo bem curtinho e com desenho, tipo manual de montar móvel. Até eu, que sou super nervosa, consegui entender de primeira. Isso pra mim foi o que mais pesou.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_2.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_2.webp';" alt="Mariana Castro" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Mariana Castro</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe do Theo (2 anos) · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “Eu não compro isso esperando usar, graças a Deus. Mas só de saber que eu tenho o passo a passo no celular e que sei por onde começar, eu fiquei bem mais leve. Antes eu vivia com aquele medinho de ‘e se acontecer e eu não souber?’. Hoje, não é que o medo sumiu, mas eu sinto que tô mais preparada. Já vale pela paz de espírito.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_6.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_6.webp';" alt="Camila Albuquerque" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Camila Albuquerque</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe da Alice (11 meses) · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “Mandei pra minha mãe e pra babá no mesmo dia. Minha mãe ficou com meu bebê a semana toda e eu não conseguia relaxar sabendo que ela podia não saber o que fazer. Agora as duas leram, e a gente até conversou sobre o que cada uma faria. Foi um peso a menos nas minhas costas. Recomendo pra quem deixa o filho com alguém.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_3.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_3.webp';" alt="Renata Silveira" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Renata Silveira</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe do Bernardo (1 ano e meio) · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “Fiquei chocada com uma coisa: eu sempre achei que pasta de dente ajudava em queimadura, minha avó fazia isso! No guia mostra que não é bem assim e o que fazer no lugar. Também vi a parte do que NÃO fazer na convulsão. Eu faria tudo errado. Ainda bem que li antes de precisar, e não depois.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_5.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_5.webp';" alt="Beatriz Mendes" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Beatriz Mendes</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe da Maitê (8 meses) · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 5 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “Pensei bastante antes de comprar, porque sempre tem aquele ‘ah, dá pra achar na internet’. Mas o que eu achava era tudo solto, um dizendo uma coisa e outro dizendo outra. Aqui tá tudo junto, organizado e fácil de achar. Quando eu parei pra pensar no que eu ia ter na mão, o valor ficou pequeno perto de tudo que o guia traz.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_4.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_4.webp';" alt="Juliana Freitas" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Juliana Freitas</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe do Lucas (10 meses) · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 6 -->
+              <div class="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col justify-between">
+                <div class="relative bg-white rounded-2xl p-5 sm:p-6 border-2 border-[#FECDD3] shadow-xs flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-1.5 mb-3">
+                      <span class="text-amber-400 text-xs font-black">★★★★★</span>
+                      <span class="text-xs font-extrabold text-[#1C1917] ml-1">5.0</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-[#1C1917] leading-relaxed font-normal">
+                      “O que mais me impressionou foi o capricho. Os desenhos são limpinhos, o texto é direto e tem a parte do que não fazer em cada situação, que eu achei genial. Dá pra imprimir a ficha e colar na geladeira, o que eu fiz na hora. Dá pra ver que foi feito com cuidado, não é aquele PDF jogado de qualquer jeito.”
+                    </p>
+                  </div>
+                  <div class="absolute -bottom-[9px] left-7 w-4 h-4 bg-white border-b-2 border-r-2 border-[#FECDD3] rotate-45 transform"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-5 pl-2">
+                  <img src="public/images/reviews/perfil_1.webp" onerror="this.onerror=null; this.src='images/reviews/perfil_1.webp';" alt="Cláudia Rocha" class="w-11 h-11 rounded-full object-cover border-2 border-[#FECDD3] shadow-xs shrink-0" loading="lazy" />
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <h4 class="font-bold text-xs sm:text-sm text-[#1C1917] truncate">Cláudia Rocha</h4>
+                      <span class="text-emerald-600 text-xs font-bold">✓</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-[#78716C] truncate font-medium">Mãe da Sofia e avó do Lucca · Compra verificada</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OFERTA E GARANTIA DE 7 DIAS (s13 - Fundo vermelho clarinho clínica) -->
+    <section id="s13" class="py-12 px-4 sm:px-6 bg-white border-t border-[#FECDD3]">
+      <div class="max-w-3xl mx-auto rounded-[28px] overflow-hidden bg-[#FFF0F2] border-2 border-[#FECDD3] text-[#121316] p-6 sm:p-10 shadow-soft space-y-6">
+        <div class="text-center space-y-2">
+          <span class="px-3.5 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold uppercase shadow-sm">Acesso Imediato • PDF Interativo + Imprimível</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#121316]">Segundos que Salvam + Checklists + Roteiro 192</h2>
+        </div>
+        <div class="-mx-6 sm:mx-0 flex justify-center pt-1">
+          <img src="public/images/vitrine_guia_segundosquesalvam_ratio_1.webp" onerror="this.onerror=null; this.src='images/vitrine_guia_segundosquesalvam_ratio_1.webp';" alt="Vitrine Guia Segundos que Salvam" class="w-full sm:max-w-[340px] aspect-square object-cover sm:object-contain rounded-none sm:rounded-2xl shadow-xs border-y sm:border border-[#FECDD3] border-x-0 sm:border-x bg-white" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 bg-white p-4 rounded-2xl border border-[#FECDD3] text-xs sm:text-sm font-semibold text-[#121316] shadow-sm">
+          <div>✓ Guia Ilustrado (35 situações, 44 páginas)</div>
+          <div>✓ Ficha de Emergência da Criança</div>
+          <div>✓ Roteiro do que falar ao 192 em ordem</div>
+          <div>✓ Checklist Casa Segura + Kit de Socorros</div>
+          <div>✓ Guia rápido de 1 página p/ avós e babás</div>
+          <div>✓ Funciona 100% offline no celular</div>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#FECDD3] text-[#121316] p-6 text-center space-y-4 shadow-sm">
+          <div class="space-y-1">
+            <div class="flex items-baseline justify-center gap-2.5">
+              <span class="text-sm sm:text-base text-[#78716C] line-through font-semibold">De R$ 89,90</span>
+              <span class="text-xs sm:text-sm font-bold text-[#1C1917]">por</span>
+              <span class="text-3xl sm:text-4xl font-extrabold text-[#FF2B44] tracking-tight">R$ 37,00</span>
+            </div>
+            <p class="text-xs sm:text-sm text-[#57534E] font-semibold">Parcele em até 12x no cartão</p>
+          </div>
+          <button onclick="goToCheckout('s13')" class="w-full sm:w-auto sm:min-w-[320px] inline-flex items-center justify-between gap-3 rounded-full bg-[#FF2B44] text-white font-extrabold text-base sm:text-lg pl-6 pr-2.5 py-3 shadow-lg hover:brightness-95 transition">
+            <span>Quero o guia agora</span>
+            <span class="w-9 h-9 rounded-full bg-white text-[#FF2B44] flex items-center justify-center">↗</span>
+          </button>
+          <p class="text-xs font-bold text-[#5A5683]">
+            Acesso imediato · Pagamento seguro pela Cakto · Baixe e use offline · Garantia incondicional de 7 dias (CDC art. 49)
+          </p>
+        </div>
+        <!-- Card Risco Zero -->
+        <div class="rounded-2xl bg-white border border-[#FECDD3] p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-5 shadow-sm">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border-2 border-[#FECDD3] text-[#FF2B44] flex flex-col items-center justify-center shrink-0 font-extrabold shadow-sm">
+            <svg class="w-8 h-8 sm:w-9 sm:h-9 stroke-[2.3] text-[#FF2B44]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span class="text-[10px] sm:text-[11px] font-black uppercase text-[#FF2B44] tracking-wider mt-0.5">7 DIAS</span>
+          </div>
+          <div class="text-center sm:text-left space-y-1.5 flex-1">
+            <h3 class="text-base sm:text-lg lg:text-xl font-extrabold text-[#1C1917] leading-snug">
+              Risco Zero: <span class="text-[#FF2B44]">Garantia de 7 dias</span> (CDC art. 49)
+            </h3>
+            <p class="text-sm sm:text-base text-[#1C1917] leading-relaxed font-medium">
+              Você tem 7 dias para ler, folhear e imprimir. Se achar que não é pra você, peça o reembolso e devolvemos 100% do valor. Sem perguntas.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ RÁPIDO (s14) -->
+    <section id="s14" class="py-12 px-4 sm:px-6 max-w-2xl mx-auto space-y-4">
+      <h2 class="text-2xl font-extrabold text-center">Dúvidas <span class="em-mint">rápidas</span>.</h2>
+      <details class="rounded-2xl bg-white p-4 border border-[#3A2390]/15" open>
+        <summary class="font-extrabold cursor-pointer">Substitui um curso de primeiros socorros?</summary>
+        <p class="mt-2 text-xs sm:text-sm text-[#5A5683]">Não. Recomendamos fazer um curso prático presencial sempre que puder. O guia funciona como consulta visual rápida na hora do susto, quando o nervosismo apaga a memória.</p>
+      </details>
+      <details class="rounded-2xl bg-white p-4 border border-[#3A2390]/15">
+        <summary class="font-extrabold cursor-pointer">Como recebo e funciona sem internet?</summary>
+        <p class="mt-2 text-xs sm:text-sm text-[#5A5683]">Você recebe imediatamente por e-mail e pela Cakto. É um PDF interativo que funciona 100% offline no celular e também pode ser impresso para ter à mão.</p>
+      </details>
+      <details class="rounded-2xl bg-white p-4 border border-[#3A2390]/15">
+        <summary class="font-extrabold cursor-pointer">E se eu não gostar?</summary>
+        <p class="mt-2 text-xs sm:text-sm text-[#5A5683]">Você tem 7 dias de garantia incondicional (CDC art. 49) para ler, folhear e imprimir. Se achar que não é para você, devolvemos 100% do valor.</p>
+      </details>
+    </section>
+
+    <footer class="bg-[#FFF5F6] text-[#1C1917] py-10 px-4 text-center text-xs space-y-3 border-t border-[#FECDD3]">
+      <p class="font-bold text-[#FF2B44] text-sm">Mãe Preparada — Educação em Segurança e Saúde Infantil</p>
+      <div class="flex flex-wrap items-center justify-center gap-4 text-[#57534E] text-xs">
+        <span>CNPJ: <strong class="text-[#1C1917]">33.653.080/0003-03</strong></span>
+        <span>E-mail: <a href="mailto:maepreparada.suporte@gmail.com" class="text-[#FF2B44] font-bold hover:underline">maepreparada.suporte@gmail.com</a></span>
+        <span>WhatsApp: <a href="https://wa.me/5513996103786" target="_blank" rel="noopener noreferrer" class="text-[#FF2B44] font-bold hover:underline">+55 13 996103786</a></span>
+      </div>
+      <p class="text-[#78716C] max-w-xl mx-auto opacity-80 pt-2">Este guia traz orientações gerais de primeiros socorros e não substitui curso prático nem atendimento médico.</p>
+      <p class="text-[#A8A29E] pt-1">© 2026 Mãe Preparada. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <!-- LÓGICA INTERATIVA COMPLETA DO QUIZ + TRANSIÇÃO PARA A LP -->
+  <script>
+    const CHECKOUT_URL = "https://pay.cakto.com.br/ID_DA_OFERTA";
+
+    const PROFILE_QS = [
+      { id: 'P0', q: 'Idade do seu(sua) filho(a) mais novo(a)?', opts: [['i1','Menos de 1 ano'],['i2','1 a 2 anos'],['i3','3 a 5 anos'],['i4','Mais de 5 anos']] },
+      { id: 'P0b', q: 'Quem fica com ele(a) quando você não está?', opts: [['avo','Avó ou familiar'],['baba','Babá'],['escola','Creche ou escola'],['eu','Sempre fico eu']] },
+      { id: 'P0c', q: 'Quanto tempo você leva até o pronto-socorro mais próximo?', opts: [['t1','Menos de 10 min'],['t2','10 a 20 min'],['t3','Mais de 20 min'],['t4','Não sei']] }
+    ];
+
+    const SCORED_QS = [
+      {
+        id: 'P1', idx: 1, title: 'Engasgo grave (bebê)', friendly: 'engasgo grave no(a) bebê',
+        q: 'Seu(sua) bebê de 8 meses engasgou com um pedaço de fruta. Abriu a boca, não faz nenhum som e está ficando arroxeado(a). O que você faz?',
+        img: 'public/images/quiz/p1-engasgo.webp',
+        opts: [
+          { t: 'Dou um pouco de água para empurrar', ok: false },
+          { t: 'Viro de cabeça para baixo pelas pernas', ok: false },
+          { t: 'Ligo 192 em viva-voz e faço 5 tapas nas costas e 5 compressões no peito, alternando', ok: true },
+          { t: 'Enfio o dedo na garganta', ok: false }
+        ],
+        err: 'Água pode levar o objeto mais fundo, virar o(a) bebê de cabeça para baixo não é recomendado e o dedo às cegas pode empurrar o objeto. No engasgo grave existe uma sequência específica.',
+        okTxt: 'Correto. Cabeça mais baixa que o corpo, 5 tapas entre as omoplatas e 5 compressões no peito. Ter a sequência na cabeça sob pressão é o difícil, e é isso que o guia deixa ilustrado.',
+        guide: 'Ligar 192 em viva-voz e alternar 5 tapas entre as omoplatas e 5 compressões no peito.'
+      },
+      {
+        id: 'P2', idx: 2, title: 'Tosse forte com leite', friendly: 'tosse forte com leite',
+        q: 'Seu(sua) bebê engasgou com leite, está vermelho(a) e tossindo forte, mas chora e respira. O que você faz?',
+        img: 'public/images/quiz/p2-leite.webp',
+        opts: [
+          { t: 'Bato nas costas várias vezes', ok: false },
+          { t: 'Deito de costas para descansar', ok: false },
+          { t: 'Deixo tossir, mantenho sentado(a) e levemente inclinado(a), e observo', ok: true },
+          { t: 'Dou água', ok: false }
+        ],
+        err: 'Quem tosse forte está respirando e se defendendo. Bater nas costas ou deitar nesse momento atrapalha. O erro inverso também é comum: tratar tosse forte como engasgo grave.',
+        okTxt: 'Correto. Saber diferenciar tosse forte de engasgo grave evita pânico e manobras desnecessárias.',
+        guide: 'Deixar tossir, manter sentado(a) e levemente inclinado(a), e observar.'
+      },
+      {
+        id: 'P3', idx: 3, title: 'Queimadura', friendly: 'queimadura',
+        q: 'Seu(sua) filho(a) derrubou água quente no braço. A pele está vermelha e dolorida. A primeira coisa a fazer é:',
+        img: 'public/images/quiz/p3-queimadura.webp',
+        opts: [
+          { t: 'Passar pasta de dente ou manteiga', ok: false },
+          { t: 'Colocar gelo direto na pele', ok: false },
+          { t: 'Deixar água corrente fria sobre a queimadura por 10 a 20 minutos', ok: true },
+          { t: 'Estourar as bolhas', ok: false }
+        ],
+        err: 'Pasta de dente e manteiga prendem o calor e aumentam o risco de infecção; gelo direto pode agravar a lesão. Nos primeiros minutos, o certo é água corrente fria.',
+        okTxt: 'Correto. O guia também mostra quando a queimadura exige pronto-socorro (tamanho, local, bolhas, bebês).',
+        guide: 'Deixar água corrente fria sobre a queimadura por 10 a 20 minutos.'
+      },
+      {
+        id: 'P4', idx: 4, title: 'Produto de limpeza', friendly: 'produto de limpeza',
+        q: 'Seu(sua) filho(a) de 2 anos bebeu um pouco de produto de limpeza. O que você faz?',
+        img: 'public/images/quiz/p4-limpeza.webp',
+        opts: [
+          { t: 'Provoco vômito', ok: false },
+          { t: 'Dou leite para neutralizar', ok: false },
+          { t: 'Ligo 0800 722 6001 ou 192 com a embalagem em mãos, sem provocar vômito', ok: true },
+          { t: 'Espero para ver se aparecem sintomas', ok: false }
+        ],
+        err: 'Provocar vômito pode queimar a garganta de novo ou levar o produto ao pulmão. Leite e antídotos caseiros não resolvem. Esperar sintomas atrasa a orientação; cada produto tem uma conduta.',
+        okTxt: 'Correto. Ligar com o nome do produto, a quantidade e o peso da criança permite uma orientação precisa.',
+        guide: 'Ligar 0800 722 6001 ou 192 com a embalagem em mãos, sem provocar vômito.'
+      },
+      {
+        id: 'P5', idx: 5, title: 'Convulsão com febre', friendly: 'convulsão',
+        q: 'Seu(sua) filho(a) está com febre e começa a convulsionar. O que você faz?',
+        img: 'public/images/quiz/p5-convulsao.webp',
+        opts: [
+          { t: 'Coloco um pano na boca para ele(a) não morder a língua', ok: false },
+          { t: 'Seguro firme para ele(a) parar de tremer', ok: false },
+          { t: 'Dou banho frio', ok: false },
+          { t: 'Deito de lado em lugar seguro, afasto objetos, anoto a hora e ligo 192 se passar de 5 minutos', ok: true }
+        ],
+        err: 'Nada na boca: a criança não engole a língua e o pano pode sufocar. Segurar o corpo pode machucar. Banho frio durante a crise não ajuda.',
+        okTxt: 'Correto. Anotar a hora ajuda a equipe médica a decidir a conduta.',
+        guide: 'Deitar de lado em lugar seguro, nunca colocar nada na boca, anotar a hora e ligar 192.'
+      },
+      {
+        id: 'P6', idx: 6, title: 'Pilha-botão', friendly: 'pilha-botão',
+        q: 'Seu(sua) filho(a) de 2 anos engoliu a pilha do controle remoto, mas parece bem e está brincando. O que você faz?',
+        img: 'public/images/quiz/p6-pilha.webp',
+        opts: [
+          { t: 'Espero sair nas fezes', ok: false },
+          { t: 'Dou laxante', ok: false },
+          { t: 'Vou agora ao pronto-socorro ou ligo 192, mesmo sem sintomas', ok: true },
+          { t: 'Dou comida para empurrar', ok: false }
+        ],
+        err: 'Pilha-botão presa no esôfago pode causar queimadura grave em cerca de 2 horas, e a criança pode parecer bem nesse tempo. Aqui, esperar é o maior risco.',
+        okTxt: 'Correto. Pouca gente sabe que a ausência de sintomas não significa segurança nesse caso.',
+        guide: 'Ir imediatamente ao pronto-socorro ou ligar 192, mesmo sem sintomas.'
+      },
+      {
+        id: 'P7', idx: 7, title: 'Afogamento', friendly: 'afogamento',
+        q: 'Você sai por 30 segundos para atender o telefone e seu(sua) filho(a) de 1 ano fica na banheira com pouca água. Qual afirmação é verdadeira?',
+        img: 'public/images/quiz/p7-afogamento.jpg',
+        opts: [
+          { t: 'Se ele(a) estiver se afogando, vai gritar e eu escuto', ok: false },
+          { t: 'Boia de braço protege nesse caso', ok: false },
+          { t: 'Afogamento é silencioso e pode acontecer em poucos centímetros de água', ok: true },
+          { t: 'Só acontece em piscina funda', ok: false }
+        ],
+        err: 'Afogamento infantil costuma ser silencioso, sem gritos nem agitação, e pode ocorrer em poucos centímetros de água. A regra é nunca sair, nem por um segundo.',
+        okTxt: 'Correto. A maioria imagina uma cena com barulho. A realidade é outra.',
+        guide: 'Nunca sair nem por um segundo; afogamento é silencioso e ocorre em poucos centímetros.'
+      },
+      {
+        id: 'P8', idx: 8, title: 'Queda com pancada na cabeça', friendly: 'queda com pancada na cabeça',
+        q: 'Seu(sua) filho(a) de 2 anos caiu e bateu a cabeça. Chorou, mas depois vomitou várias vezes e está muito sonolento(a). O que você faz?',
+        img: 'public/images/quiz/p8-queda.webp',
+        opts: [
+          { t: 'Deixo dormir, é normal', ok: false },
+          { t: 'Dou um remédio para a dor', ok: false },
+          { t: 'Procuro atendimento imediatamente (192 se estiver difícil de acordar)', ok: true },
+          { t: 'Observo até amanhã', ok: false }
+        ],
+        err: 'Vômitos repetidos e sono excessivo após pancada na cabeça são sinais de alerta e pedem avaliação na hora.',
+        okTxt: 'Correto. Conhecer os sinais de alerta torna a decisão rápida.',
+        guide: 'Procurar avaliação médica imediatamente diante de vômitos repetidos e sonolência.'
+      }
+    ];
+
+    let qState = {
+      stage: 'intro', // intro, p0, p0b, p0c, q, feedback, breather, capture, prep
+      qIdx: 0,
+      profile: { age: 'i2', caregiver: 'avo', hospital: 't2' },
+      answers: {},
+      name: ''
+    };
+
+    function getGapsCount() {
+      let g = 0;
+      SCORED_QS.forEach(q => {
+        const chosen = qState.answers[q.id];
+        if (chosen !== undefined && !q.opts[chosen].ok) g++;
+      });
+      return g;
+    }
+
+    function renderQuiz() {
+      const box = document.getElementById('quiz-stage-container');
+      const backBtn = document.getElementById('quiz-back-btn');
+      const badge = document.getElementById('quiz-counter-badge');
+      const bar = document.getElementById('quiz-progress-bar');
+
+      backBtn.classList.toggle('hidden', qState.stage === 'intro' || qState.stage === 'prep');
+      backBtn.classList.toggle('flex', qState.stage !== 'intro' && qState.stage !== 'prep');
+
+      if (qState.stage === 'intro') {
+        bar.style.width = '6%';
+        badge.textContent = 'Diagnóstico Rápido · 2 min';
+        box.innerHTML = `
+          <div class="rounded-[24px] bg-white p-6 sm:p-8 border border-[#3A2390]/15 shadow-lg space-y-4 animate-fade-up">
+            <span class="inline-block px-3 py-1 rounded-full bg-[#EEF0FF] text-[#2A1A73] text-xs font-extrabold">⏱ Diagnóstico Interativo · 8 Situações Reais</span>
+            <div class="w-full overflow-hidden rounded-2xl border-2 border-[#3A2390]/15 bg-white shadow-sm flex items-center justify-center p-2">
+              <img src="public/images/quiz/intro.webp" onerror="this.onerror=null; this.src='images/quiz/intro.webp';" alt="Mãe Preparada: Segundos que Salvam" class="max-h-52 sm:max-h-60 w-auto object-contain rounded-xl select-none" />
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight">Você saberia o que fazer nos <span class="em-mint">primeiros minutos</span> de uma emergência com seu(sua) filho(a)?</h1>
+            <p class="text-sm sm:text-base text-[#5A5683] font-medium">8 situações reais. 2 minutos. Você descobre onde já está preparada e onde ainda não.</p>
+            <div class="rounded-2xl bg-[#F1F3F6] p-3.5 border border-[#E2E5EB] flex items-center justify-between gap-3">
+              <div class="text-xs font-bold text-[#121316]">Engasgo · Leite · Queimadura · Limpeza · Convulsão · Pilha-botão · Banheira · Queda</div>
+              <span class="px-2.5 py-1 rounded-xl bg-[#FF2B44] text-white text-xs font-extrabold shrink-0 shadow-sm">192</span>
+            </div>
+            <button onclick="startQuiz()" class="w-full min-h-[54px] rounded-full bg-[#FF2B44] text-white font-extrabold text-base px-6 py-3 flex items-center justify-between shadow-lg hover:brightness-95 transition">
+              <span>Começar o teste</span>
+              <span class="w-9 h-9 rounded-full bg-white/20 text-white flex items-center justify-center">↗</span>
+            </button>
+            <p class="text-center text-xs font-semibold text-[#667085]">Gratuito · Você só informa seu contato no final, para ver o resultado.</p>
+          </div>`;
+        return;
+      }
+
+      if (qState.stage === 'p0' || qState.stage === 'p0b' || qState.stage === 'p0c') {
+        const idx = qState.stage === 'p0' ? 0 : qState.stage === 'p0b' ? 1 : 2;
+        const pq = PROFILE_QS[idx];
+        bar.style.width = `${12 + idx * 8}%`;
+        badge.textContent = `Contexto rápido (${idx + 1}/3)`;
+        box.innerHTML = `
+          <div class="space-y-4 animate-fade-up">
+            <div>
+              <span class="text-xs font-extrabold uppercase text-[#FF2B44]">Para personalizar seu resultado</span>
+              <h2 class="text-xl sm:text-2xl font-extrabold mt-0.5 text-[#121316]">${pq.q}</h2>
+            </div>
+            <div class="space-y-2.5">
+              ${pq.opts.map(([val, label]) => `
+                <button onclick="answerProfile('${pq.id}','${val}')" class="w-full min-h-[56px] px-4 py-3 rounded-2xl bg-[#F4F5F8] hover:bg-[#ECEEF2] border-2 border-[#E2E5EB] hover:border-[#FF2B44] text-[#121316] shadow-sm text-left font-bold text-base flex items-center justify-between transition">
+                  <span>${label}</span>
+                  <span class="w-6 h-6 rounded-full bg-white border-2 border-[#CBD5E1]"></span>
+                </button>
+              `).join('')}
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (qState.stage === 'q') {
+        const q = SCORED_QS[qState.qIdx];
+        bar.style.width = `${30 + ((qState.qIdx + 1) / 8) * 60}%`;
+        badge.innerHTML = `Pergunta ${q.idx} de 8 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
+        box.innerHTML = `
+          <div class="space-y-5 sm:space-y-6 animate-fade-up">
+            <div class="w-full overflow-hidden rounded-2xl border-2 border-[#E2E5EB] bg-white shadow-sm flex items-center justify-center p-2">
+              <img src="${q.img}" onerror="this.onerror=null; this.src='${q.img.replace('public/', '')}';" alt="${q.title}" class="max-h-48 sm:max-h-56 w-auto object-contain rounded-xl select-none" />
+            </div>
+            <div class="space-y-2.5 pt-1 sm:pt-2">
+              <span class="inline-block px-3 py-1 rounded-lg bg-[#F1F3F6] text-[#121316] text-xs sm:text-sm font-extrabold uppercase">Situação ${q.idx} de 8 · ${q.title}</span>
+              <h2 class="text-lg sm:text-2xl font-extrabold leading-snug sm:leading-relaxed text-[#121316]">${q.q}</h2>
+            </div>
+            <div class="space-y-3 pt-1 sm:pt-2">
+              ${q.opts.map((o, i) => `
+                <button onclick="answerScored(${i})" class="w-full min-h-[62px] px-5 py-3.5 sm:py-4 rounded-2xl bg-[#F4F5F8] hover:bg-[#ECEEF2] border-2 border-[#E2E5EB] hover:border-[#FF2B44] text-[#121316] shadow-sm text-left font-bold text-sm sm:text-base flex items-center justify-between gap-4 transition">
+                  <span class="flex-1">${o.t}</span>
+                  <span class="w-6 h-6 rounded-full bg-white border-2 border-[#CBD5E1] shrink-0"></span>
+                </button>
+              `).join('')}
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (qState.stage === 'feedback') {
+        const q = SCORED_QS[qState.qIdx];
+        const chosenIdx = qState.answers[q.id];
+        const isOk = q.opts[chosenIdx]?.ok;
+        badge.innerHTML = `Pergunta ${q.idx} de 8 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
+        box.innerHTML = `
+          <div class="rounded-[24px] bg-white p-5 sm:p-7 border-2 border-[#E2E5EB] shadow-lg space-y-4 animate-fade-up">
+            ${isOk
+              ? `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] text-xs font-extrabold">✓ Conduta alinhada às diretrizes</span>`
+              : `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FFF0F2] text-[#FF2B44] border border-[#FECDD3] text-xs font-extrabold">ℹ Vale saber</span>`
+            }
+            <h3 class="text-lg sm:text-xl font-extrabold text-[#121316]">${q.title}</h3>
+            ${isOk
+              ? `<p class="text-sm sm:text-base font-medium leading-relaxed text-[#121316]/90">${q.okTxt}</p>`
+              : `<div class="space-y-3 text-sm">
+                   <div class="p-4 rounded-2xl bg-[#FFF0F2] border-2 border-[#FF2B44] space-y-1 shadow-sm">
+                     <strong class="block text-xs uppercase tracking-wider text-[#FF2B44]">O que poderia acontecer:</strong>
+                     <p class="text-[#121316] font-medium leading-relaxed">${q.err}</p>
+                   </div>
+                   <div class="p-4 rounded-2xl bg-[#F0FDF4] border-2 border-[#22C55E] space-y-1 shadow-sm">
+                     <strong class="block text-xs uppercase tracking-wider text-[#16A34A]">O que as diretrizes indicam:</strong>
+                     <p class="text-[#14532D] font-bold leading-relaxed">${q.guide}</p>
+                   </div>
+                 </div>`
+            }
+            <button onclick="nextQuestion()" class="w-full min-h-[52px] rounded-full bg-[#FF2B44] text-white font-extrabold text-base px-6 py-2.5 flex items-center justify-between shadow-md hover:brightness-95 transition">
+              <span>Próxima</span>
+              <span class="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">↗</span>
+            </button>
+          </div>`;
+        return;
+      }
+
+      if (qState.stage === 'breather') {
+        bar.style.width = '62%';
+        badge.textContent = 'Metade concluída';
+        box.innerHTML = `
+          <div class="rounded-[28px] bg-[#FFF0F2] border-2 border-[#FECDD3] text-[#1C1917] p-7 sm:p-10 text-center space-y-6 shadow-soft animate-fade-up">
+            <div class="w-14 h-14 rounded-2xl bg-[#FF2B44] text-white flex items-center justify-center mx-auto shadow-md text-2xl font-black">
+              !
+            </div>
+            <span class="inline-block px-3.5 py-1.5 rounded-full bg-white text-[#E11D48] border border-[#FECDD3] text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm">Metade concluída · Faltam 4</span>
+            <p class="text-xl sm:text-2xl font-extrabold leading-snug text-[#1C1917] max-w-md mx-auto">“Estas situações confundem muita gente porque a conduta correta costuma ser contraintuitiva. Continue: faltam 4.”</p>
+            <div class="pt-2">
+              <button onclick="continueAfterBreather()" class="w-full min-h-[54px] rounded-full bg-[#FF2B44] text-white font-extrabold text-base px-6 py-3 flex items-center justify-between shadow-md hover:brightness-95 transition">
+                <span>Continuar</span>
+                <span class="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center">↗</span>
+              </button>
+            </div>
+          </div>`;
+        return;
+      }
+
+      if (qState.stage === 'prep') {
+        bar.style.width = '100%';
+        badge.textContent = 'Montando diagnóstico...';
+        box.innerHTML = `
+          <div class="rounded-[24px] bg-[#121316] text-white p-8 text-center space-y-5 shadow-xl animate-fade-up">
+            <div class="w-12 h-12 rounded-full border-4 border-white/20 border-t-[#FF2B44] animate-spin mx-auto"></div>
+            <div class="space-y-2 text-sm font-bold max-w-xs mx-auto text-left">
+              <div>✓ Contando suas respostas…</div>
+              <div>✓ Reunindo as situações para revisar…</div>
+              <div>✓ Montando seu resultado.</div>
+            </div>
+          </div>`;
+      }
+    }
+
+    function startQuiz() { qState.stage = 'p0'; renderQuiz(); }
+    function answerProfile(id, val) {
+      if (id === 'P0') { qState.profile.age = val; qState.stage = 'p0b'; }
+      else if (id === 'P0b') { qState.profile.caregiver = val; qState.stage = 'p0c'; }
+      else { qState.profile.hospital = val; qState.stage = 'q'; qState.qIdx = 0; }
+      renderQuiz();
+    }
+    function answerScored(optIdx) {
+      const q = SCORED_QS[qState.qIdx];
+      qState.answers[q.id] = optIdx;
+      qState.stage = 'feedback';
+      renderQuiz();
+    }
+    function nextQuestion() {
+      if (qState.qIdx === 3) { qState.stage = 'breather'; renderQuiz(); return; }
+      if (qState.qIdx >= 7) {
+        qState.stage = 'prep';
+        renderQuiz();
+        setTimeout(() => {
+          populateLPResult();
+          switchView('resultado');
+        }, 1800);
+        return;
+      }
+      qState.qIdx++;
+      qState.stage = 'q';
+      renderQuiz();
+    }
+    function continueAfterBreather() {
+      qState.qIdx = 4;
+      qState.stage = 'q';
+      renderQuiz();
+    }
+    function quizBack() {
+      if (qState.stage === 'feedback') qState.stage = 'q';
+      else if (qState.stage === 'p0') qState.stage = 'intro';
+      else if (qState.stage === 'p0b') qState.stage = 'p0';
+      else if (qState.stage === 'p0c') qState.stage = 'p0b';
+      else if (qState.stage === 'q') {
+        if (qState.qIdx === 0) qState.stage = 'p0c';
+        else qState.qIdx--;
+      } else if (qState.stage === 'breather') { qState.qIdx = 3; qState.stage = 'feedback'; }
+      else if (qState.stage === 'prep') { qState.qIdx = 7; qState.stage = 'q'; }
+      renderQuiz();
+    }
+
+    function populateLPResult() {
+      let acertos = 0;
+      let wrongs = [];
+      SCORED_QS.forEach(q => {
+        const idx = qState.answers[q.id];
+        if (idx !== undefined && q.opts[idx].ok) acertos++;
+        else wrongs.push({
+          title: q.title,
+          friendly: q.friendly,
+          chosen: idx !== undefined ? q.opts[idx].t : 'Em dúvida',
+          guide: q.guide
+        });
+      });
+
+      document.getElementById('res-score-badge').textContent = `${acertos} de 8`;
+      document.getElementById('res-ring-circle').setAttribute('stroke-dashoffset', String(314 - (314 * acertos) / 8));
+      const prefix = qState.name ? `${qState.name}, v` : 'V';
+      document.getElementById('res-headline').textContent = `${prefix}ocê acertou ${acertos} de 8 situações.`;
+      document.getElementById('hero-h1').innerHTML = `Você acertou ${acertos} de 8. Agora veja como transformar <span class="em-mint">dúvida</span> em passo a passo.`;
+
+      const errNames = wrongs.map(w => w.friendly).join(', ') || 'nenhuma das 8 situações';
+      if (acertos <= 3) {
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. E isso não diz nada sobre você como mãe. Diz sobre o que ninguém ensina na maternidade. Nas situações em que houve dúvida (${errNames}), a ação escolhida poderia atrasar o socorro. A boa notícia: isso se aprende em poucos minutos e se consulta na hora.`;
+      } else if (acertos <= 6) {
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. Você sabe parte, e a parte que falta (${errNames}) pesa. Mesmo nas que acertou, no susto o nervosismo apaga a memória. Os primeiros minutos dependem de quem está ao lado dele.`;
+      } else {
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. Você está bem à frente! Mas pergunte a si mesma: sob pressão de verdade, você e quem cuida dele lembrariam de tudo? O guia funciona como memória de apoio rápida no celular e onde você precisar.`;
+      }
+
+      const cardsBox = document.getElementById('res-wrong-cards');
+      const cardsWrap = document.getElementById('res-wrong-cards-wrapper');
+      if (wrongs.length === 0) {
+        cardsWrap.classList.add('hidden');
+      } else {
+        cardsWrap.classList.remove('hidden');
+        cardsBox.innerHTML = wrongs.slice(0, 3).map((w) => `
+          <details class="group rounded-2xl bg-white border border-[#FECDD3] overflow-hidden shadow-xs transition-all">
+            <summary class="w-full min-h-[56px] px-5 py-4 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FFF0F2]/40 transition list-none">
+              <div class="flex items-center gap-3">
+                <span class="px-2.5 py-1 rounded-full bg-[#FFF0F2] text-[#FF2B44] border border-[#FECDD3] text-xs font-extrabold shrink-0">Vale saber</span>
+                <span class="font-extrabold text-base sm:text-lg text-[#121316]">${w.title}</span>
+              </div>
+              <span class="text-[#FF2B44] text-sm font-bold transition-transform duration-200 group-open:rotate-180">▼</span>
+            </summary>
+            <div class="px-5 pb-5 pt-3 border-t border-[#FECDD3] space-y-3 bg-[#FFF0F2]/20">
+              <p class="text-sm sm:text-base text-[#44403C] leading-relaxed"><strong class="text-[#FF2B44] font-extrabold">Sua resposta no teste:</strong> “${w.chosen}”</p>
+              <div class="p-3.5 rounded-xl bg-white border-2 border-[#86EFAC] text-[#15803D] text-sm sm:text-base font-semibold leading-relaxed shadow-xs">
+                <strong class="text-[#15803D] font-extrabold block mb-1">✓ O que as diretrizes recomendam:</strong>
+                ${w.guide}
+              </div>
+            </div>
+          </details>
+        `).join('');
+      }
+    }
+
+    function shareCaregiver() {
+      const origin = window.location.origin || '';
+      const text = `Fiz este teste rápido de 2 minutos sobre primeiros socorros em bebês e crianças e lembrei de você, que também cuida do nosso pequeno: ${origin}/quiz`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function shareGuideCaregiver() {
+      const origin = window.location.origin || '';
+      const text = `Olha este guia ilustrado de primeiros socorros infantis (Segundos que Salvam) para deixarmos de consulta rápida em casa: ${origin}/guia`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function switchView(view) {
+      const qView = document.getElementById('view-quiz');
+      const lpView = document.getElementById('view-lp');
+      const bQuiz = document.getElementById('btn-nav-quiz');
+      const bLp = document.getElementById('btn-nav-lp');
+      if (view === 'quiz') {
+        qView.classList.remove('hidden');
+        lpView.classList.add('hidden');
+        bQuiz.className = 'px-3 py-1 rounded-full font-extrabold bg-[#6EF0B9] text-[#2A1A73]';
+        bLp.className = 'px-3 py-1 rounded-full font-bold bg-white/10 text-white';
+      } else {
+        populateLPResult();
+        qView.classList.add('hidden');
+        lpView.classList.remove('hidden');
+        bLp.className = 'px-3 py-1 rounded-full font-extrabold bg-[#6EF0B9] text-[#2A1A73]';
+        bQuiz.className = 'px-3 py-1 rounded-full font-bold bg-white/10 text-white';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function goToCheckout(loc) {
+      window.open(CHECKOUT_URL + '?sck=' + loc, '_blank');
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
+
