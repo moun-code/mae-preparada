@@ -36,8 +36,8 @@ export const ORG_CONFIG = {
     '⟦escrever missão em 2 linhas — sugestão base: Traduzir diretrizes públicas de emergência pediátrica em materiais visuais de consulta imediata, para que toda família saiba dar o primeiro passo com clareza.⟧',
   cnpjPending: '33.653.080/0003-03',
   cnpj: '33.653.080/0003-03',
-  emailPending: 'maepreparada.suporte@gmail.com',
-  email: 'maepreparada.suporte@gmail.com',
+  emailPending: 'eumaepreparada.suporte@gmail.com',
+  email: 'eumaepreparada.suporte@gmail.com',
   whatsappPending: '+55 13 996103786',
   whatsapp: '+55 13 996103786',
   whatsappUrl: 'https://wa.me/5513996103786',
@@ -46,7 +46,7 @@ export const ORG_CONFIG = {
 export const OFFER_CONFIG = {
   checkoutUrl:
     process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL ||
-    'https://pay.cakto.com.br/ID_DA_OFERTA',
+    'https://pay.cakto.com.br/8dpaa2r_1286618',
   isCheckoutUrlPending:
     !process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL ||
     process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL.includes('ID_DA_OFERTA'),

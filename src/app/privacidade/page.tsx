@@ -138,10 +138,10 @@ export default function PrivacidadePage() {
               </Link>{' '}
               ou pelo e-mail{' '}
               <a
-                href="mailto:maepreparada.suporte@gmail.com"
+                href="mailto:eumaepreparada.suporte@gmail.com"
                 className="font-bold text-[#FF2B44] hover:underline"
               >
-                maepreparada.suporte@gmail.com
+                eumaepreparada.suporte@gmail.com
               </a>
               .
             </p>

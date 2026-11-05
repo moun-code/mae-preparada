@@ -91,10 +91,10 @@ export default function ContatoPage() {
                 <Mail className="w-4 h-4 text-[var(--indigo-700)] shrink-0" />
                 <strong>E-mail direto:</strong>
                 <a
-                  href="mailto:maepreparada.suporte@gmail.com"
+                  href="mailto:eumaepreparada.suporte@gmail.com"
                   className="font-bold text-[#FF2B44] hover:underline break-all"
                 >
-                  maepreparada.suporte@gmail.com
+                  eumaepreparada.suporte@gmail.com
                 </a>
               </div>
               <div className="flex flex-wrap items-center gap-2">

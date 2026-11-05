@@ -112,10 +112,10 @@ export function Footer() {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold">E-mail de suporte:</span>
                 <a
-                  href="mailto:maepreparada.suporte@gmail.com"
+                  href="mailto:eumaepreparada.suporte@gmail.com"
                   className="font-bold text-[#FF2B44] hover:underline break-all"
                 >
-                  maepreparada.suporte@gmail.com
+                  eumaepreparada.suporte@gmail.com
                 </a>
               </div>
               <div className="flex flex-wrap items-center gap-2">

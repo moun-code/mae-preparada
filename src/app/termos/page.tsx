@@ -86,10 +86,10 @@ export default function TermosPage() {
               e reembolso integral do valor pago, diretamente pela plataforma
               Cakto ou pelo nosso suporte em{' '}
               <a
-                href="mailto:maepreparada.suporte@gmail.com"
+                href="mailto:eumaepreparada.suporte@gmail.com"
                 className="font-bold text-[#FF2B44] hover:underline"
               >
-                maepreparada.suporte@gmail.com
+                eumaepreparada.suporte@gmail.com
               </a>
               .
             </p>
