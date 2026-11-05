@@ -148,6 +148,16 @@ export function buildCaktoCheckoutUrl(
       url.searchParams.set('src', attribution.utm_content || 'meta_ads');
     }
 
+    // Preserva quaisquer UTMs ou parâmetros de rastreamento adicionais (Utmify / Google / Meta) presentes na URL atual
+    if (typeof window !== 'undefined' && window.location.search) {
+      const currentParams = new URLSearchParams(window.location.search);
+      currentParams.forEach((val, k) => {
+        if (!url.searchParams.has(k) && val && val.trim().length > 0) {
+          url.searchParams.set(k, val.trim());
+        }
+      });
+    }
+
     // Pré-preenchimento documentado pela Cakto (somente com consentimento LGPD)
     const lead = options?.prefillLead;
     if (lead?.consented) {

@@ -111,7 +111,8 @@ export function QuizExperience() {
     const t2 = setTimeout(() => setPrepStep(3), 2000);
     const t3 = setTimeout(() => {
       setState((prev) => ({ ...prev, completed: true, currentStage: 'done' }));
-      router.push('/resultado');
+      const search = typeof window !== 'undefined' ? window.location.search : '';
+      router.push(`/resultado${search}`);
     }, 3000);
 
     return () => {
