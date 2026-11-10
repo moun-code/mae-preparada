@@ -95,9 +95,11 @@ let pixelInitialized = false;
 
 export function initMetaPixelIfConsented(): void {
   if (typeof window === 'undefined' || pixelInitialized) return;
-  if (getCookieConsent() !== 'granted') return;
+  // Dispara por padrão a menos que o usuário tenha explicitamente negado ('denied')
+  if (getCookieConsent() === 'denied') return;
 
-  const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const pixelId =
+    process.env.NEXT_PUBLIC_META_PIXEL_ID || '4483190488603377';
   if (!pixelId) {
     pixelInitialized = true;
     return;
@@ -245,7 +247,8 @@ export function track<K extends TrackingEventName>(
 
   const consent = getCookieConsent();
   const eventId = options?.eventId || generateEventId(eventName);
-  const canSendToMeta = consent === 'granted';
+  // Dispara eventos para a Meta por padrão, a menos que o usuário tenha recusado cookies
+  const canSendToMeta = consent !== 'denied';
 
   if (canSendToMeta && def.oncePerSession) {
     markFiredInSession(sessionKey);

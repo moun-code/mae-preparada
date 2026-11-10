@@ -34,7 +34,7 @@ export function CookieConsentAndDebug() {
     captureAttributionOnVisit();
     const currentConsent = getCookieConsent();
     setConsent(currentConsent);
-    if (currentConsent === 'granted') {
+    if (currentConsent !== 'denied') {
       initMetaPixelIfConsented();
     }
     setDebugActive(isDebugMode());

@@ -35,6 +35,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={plusJakarta.variable}>
       <head>
+        {/* Preconnect para acelerar conexões externas críticas */}
+        <link rel="preconnect" href="https://connect.facebook.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.utmify.com.br" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pay.cakto.com.br" />
+
         {/* Utmify Pixel & UTMs Tracking Script */}
         <script
           dangerouslySetInnerHTML={{

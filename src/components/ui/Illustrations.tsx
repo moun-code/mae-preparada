@@ -33,7 +33,7 @@ export function QuizQuestionIllustration({
     P4: '/images/quiz/p4-limpeza.webp',
     P5: '/images/quiz/p5-convulsao.webp',
     P6: '/images/quiz/p6-pilha.webp',
-    P7: '/images/quiz/p7-afogamento.jpg',
+    P7: '/images/quiz/p7-afogamento.webp',
     P8: '/images/quiz/p8-queda.webp',
   };
 
