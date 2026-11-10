@@ -88,16 +88,49 @@ export function QuizExperience() {
     if (!hydrated) return;
 
     let stepNum: number | null = null;
-    if (state.currentStage === 'p0') stepNum = 1;
-    else if (state.currentStage === 'p0b') stepNum = 2;
-    else if (state.currentStage === 'p0c') stepNum = 3;
-    else if (state.currentStage === 'questions') {
+    let stepEvent:
+      | 'Quiz_Contexto_1'
+      | 'Quiz_Contexto_2'
+      | 'Quiz_Contexto_3'
+      | 'Quiz_Pergunta_1'
+      | 'Quiz_Pergunta_2'
+      | 'Quiz_Pergunta_3'
+      | 'Quiz_Pergunta_4'
+      | 'Quiz_Pergunta_5'
+      | 'Quiz_Pergunta_6'
+      | 'Quiz_Pergunta_7'
+      | 'Quiz_Pergunta_8'
+      | null = null;
+
+    if (state.currentStage === 'p0') {
+      stepNum = 1;
+      stepEvent = 'Quiz_Contexto_1';
+    } else if (state.currentStage === 'p0b') {
+      stepNum = 2;
+      stepEvent = 'Quiz_Contexto_2';
+    } else if (state.currentStage === 'p0c') {
+      stepNum = 3;
+      stepEvent = 'Quiz_Contexto_3';
+    } else if (state.currentStage === 'questions') {
       stepNum = 4 + state.currentQuestionIdx; // 4..11
+      const qIdx = state.currentQuestionIdx + 1; // 1..8
+      stepEvent = `Quiz_Pergunta_${qIdx}` as
+        | 'Quiz_Pergunta_1'
+        | 'Quiz_Pergunta_2'
+        | 'Quiz_Pergunta_3'
+        | 'Quiz_Pergunta_4'
+        | 'Quiz_Pergunta_5'
+        | 'Quiz_Pergunta_6'
+        | 'Quiz_Pergunta_7'
+        | 'Quiz_Pergunta_8';
     }
 
     if (stepNum !== null) {
       window.history.replaceState(null, '', `/quiz#e${stepNum}`);
       track('QuizStep', { step: stepNum });
+      if (stepEvent) {
+        track(stepEvent, {});
+      }
     } else if (state.currentStage === 'preparing') {
       window.history.replaceState(null, '', '/quiz#resultado');
     }

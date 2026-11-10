@@ -10,6 +10,17 @@ export type TrackingEventName =
   | 'ViewContent'
   | 'QuizStart'
   | 'QuizStep'
+  | 'Quiz_Contexto_1'
+  | 'Quiz_Contexto_2'
+  | 'Quiz_Contexto_3'
+  | 'Quiz_Pergunta_1'
+  | 'Quiz_Pergunta_2'
+  | 'Quiz_Pergunta_3'
+  | 'Quiz_Pergunta_4'
+  | 'Quiz_Pergunta_5'
+  | 'Quiz_Pergunta_6'
+  | 'Quiz_Pergunta_7'
+  | 'Quiz_Pergunta_8'
   | 'QuizComplete'
   | 'LeadFormView'
   | 'Lead'
@@ -60,6 +71,17 @@ export interface EventParamsMap {
   ViewContent: { content_name: 'quiz' | 'resultado' | 'guia' };
   QuizStart: Record<string, never>;
   QuizStep: { step: number }; // 1..11 apenas número inteiro
+  Quiz_Contexto_1: Record<string, never>;
+  Quiz_Contexto_2: Record<string, never>;
+  Quiz_Contexto_3: Record<string, never>;
+  Quiz_Pergunta_1: Record<string, never>;
+  Quiz_Pergunta_2: Record<string, never>;
+  Quiz_Pergunta_3: Record<string, never>;
+  Quiz_Pergunta_4: Record<string, never>;
+  Quiz_Pergunta_5: Record<string, never>;
+  Quiz_Pergunta_6: Record<string, never>;
+  Quiz_Pergunta_7: Record<string, never>;
+  Quiz_Pergunta_8: Record<string, never>;
   QuizComplete: Record<string, never>;
   LeadFormView: Record<string, never>;
   Lead: { value?: number; currency?: 'BRL' };
@@ -107,6 +129,72 @@ export const EVENT_DICTIONARY: Record<TrackingEventName, EventDefinition> = {
     type: 'custom',
     allowedKeys: ['step'],
     oncePerSession: true, // Único por valor de step (1..11)
+  },
+  Quiz_Contexto_1: {
+    name: 'Quiz_Contexto_1',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Contexto_2: {
+    name: 'Quiz_Contexto_2',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Contexto_3: {
+    name: 'Quiz_Contexto_3',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_1: {
+    name: 'Quiz_Pergunta_1',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_2: {
+    name: 'Quiz_Pergunta_2',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_3: {
+    name: 'Quiz_Pergunta_3',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_4: {
+    name: 'Quiz_Pergunta_4',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_5: {
+    name: 'Quiz_Pergunta_5',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_6: {
+    name: 'Quiz_Pergunta_6',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_7: {
+    name: 'Quiz_Pergunta_7',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
+  },
+  Quiz_Pergunta_8: {
+    name: 'Quiz_Pergunta_8',
+    type: 'custom',
+    allowedKeys: [],
+    oncePerSession: true,
   },
   QuizComplete: {
     name: 'QuizComplete',
