@@ -50,9 +50,9 @@ export const OFFER_CONFIG = {
   isCheckoutUrlPending:
     !process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL ||
     process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL.includes('ID_DA_OFERTA'),
-  cashPricePending: 'R$ 37,00',
-  installmentsPending: 'Parcele em até 8x no cartão',
-  referencePricePending: 'De R$ 89,90 por R$ 37,00',
+  cashPricePending: 'R$ 29,90',
+  installmentsPending: 'Parcele em até 6x no cartão',
+  referencePricePending: 'De R$ 58,90 por R$ 29,90',
   verifiedComparisonPending:
     '⟦Ancoragem de preço só com comparação verdadeira e verificável (ex.: custo real de um curso presencial)⟧',
   guaranteeDays: 7, // 7 dias (CDC art. 49) — ⟦Se eu quiser, 30 dias.⟧

@@ -1176,17 +1176,17 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                 <div className="space-y-1">
                   <div className="flex items-baseline justify-center gap-2.5">
                     <span className="text-sm sm:text-base text-[#78716C] line-through font-semibold">
-                      De R$ 89,90
+                      De R$ 58,90
                     </span>
                     <span className="text-xs sm:text-sm font-bold text-[#1C1917]">
                       por
                     </span>
                     <span className="text-3xl sm:text-4xl font-extrabold text-[#FF2B44] tracking-tight">
-                      R$ 37,00
+                      R$ 29,90
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-[#57534E] font-semibold">
-                    Parcele em até 8x no cartão
+                    Parcele em até 6x no cartão
                   </p>
                 </div>
 
