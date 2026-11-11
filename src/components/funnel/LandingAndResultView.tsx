@@ -1182,7 +1182,7 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                       por
                     </span>
                     <span className="text-3xl sm:text-4xl font-extrabold text-[#FF2B44] tracking-tight">
-                      R$ 29,90
+                      R$ 34,90
                     </span>
                   </div>
                   <p className="text-xs sm:text-sm text-[#57534E] font-semibold">
