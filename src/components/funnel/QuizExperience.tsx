@@ -69,7 +69,7 @@ export function QuizExperience() {
     const loaded = loadQuizState();
     if (loaded.currentStage === 'preparing' || loaded.currentStage === 'done' || loaded.currentStage === 'capture') {
       loaded.currentStage = 'questions';
-      loaded.currentQuestionIdx = 7;
+      loaded.currentQuestionIdx = SCORED_QUESTIONS.length - 1;
       loaded.showingFeedback = false;
     }
     setState(loaded);
@@ -179,9 +179,9 @@ export function QuizExperience() {
       case 'p0c':
         return 24;
       case 'questions':
-        return Math.round(28 + ((state.currentQuestionIdx + 1) / 8) * 62);
-      case 'breather':
-        return 62;
+        return Math.round(
+          28 + ((state.currentQuestionIdx + 1) / SCORED_QUESTIONS.length) * 62
+        );
       case 'capture':
         return 95;
       case 'preparing':
@@ -271,19 +271,8 @@ export function QuizExperience() {
   };
 
   const handleNextAfterFeedback = () => {
-    // Após P4 (index 3), exibir tela de respiro se ainda não exibida
-    if (state.currentQuestionIdx === 3 && !state.breatherShown) {
-      setState((prev) => ({
-        ...prev,
-        showingFeedback: false,
-        breatherShown: true,
-        currentStage: 'breather',
-      }));
-      return;
-    }
-
-    // Após P8 (index 7), conclui perguntas e vai direto para o preparo e resultado
-    if (state.currentQuestionIdx >= 7) {
+    // Ao responder a última pergunta pontuada, conclui e vai direto para o preparo e resultado
+    if (state.currentQuestionIdx >= SCORED_QUESTIONS.length - 1) {
       track('QuizComplete', {});
       setState((prev) => ({
         ...prev,
@@ -311,13 +300,6 @@ export function QuizExperience() {
       setState((prev) => ({ ...prev, currentStage: 'p0' }));
     } else if (state.currentStage === 'p0c') {
       setState((prev) => ({ ...prev, currentStage: 'p0b' }));
-    } else if (state.currentStage === 'breather') {
-      setState((prev) => ({
-        ...prev,
-        currentStage: 'questions',
-        currentQuestionIdx: 3,
-        showingFeedback: true,
-      }));
     } else if (state.currentStage === 'questions') {
       if (state.currentQuestionIdx === 0) {
         setState((prev) => ({ ...prev, currentStage: 'p0c' }));
@@ -378,7 +360,7 @@ export function QuizExperience() {
           {state.currentStage === 'questions' && (
             <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-extrabold shrink-0">
               <span className="text-[var(--ink-muted)] hidden xs:inline">
-                Pergunta {currentQuestion.questionIndex} de 8
+                Pergunta {currentQuestion.questionIndex} de {SCORED_QUESTIONS.length}
               </span>
               <span className="px-2.5 sm:px-3 py-1 rounded-full bg-[#FFF0F2] text-[#FF2B44] border border-[#FECDD3] font-extrabold shadow-xs text-xs sm:text-sm whitespace-nowrap">
                 Lacunas: {gapsCount}
@@ -553,7 +535,7 @@ export function QuizExperience() {
                 {/* Bloco de Enunciado da Pergunta: bem separado da imagem e das respostas */}
                 <div className="space-y-2.5 pt-1 sm:pt-2">
                   <span className="inline-block px-3 py-1 rounded-lg bg-[var(--lavender-100)] text-[var(--indigo-700)] text-xs sm:text-sm font-extrabold uppercase tracking-wider">
-                    Situação {currentQuestion.questionIndex} de 8 ·{' '}
+                    Situação {currentQuestion.questionIndex} de {SCORED_QUESTIONS.length} ·{' '}
                     {currentQuestion.title}
                   </span>
                   <h2 className="text-lg sm:text-2xl font-extrabold text-[var(--indigo-900)] leading-snug sm:leading-relaxed">
@@ -653,46 +635,6 @@ export function QuizExperience() {
             )}
           </div>
         )}
-
-        {/* ==================================================================
-            TELA DE RESPIRO APÓS A PERGUNTA 4
-           ================================================================== */}
-        {state.currentStage === 'breather' && (
-          <div className="rounded-[28px] bg-[#FFF0F2] border-2 border-[#FECDD3] text-[#1C1917] p-6 sm:p-10 shadow-soft space-y-6 text-center animate-fade-up">
-            <div className="w-14 h-14 rounded-2xl bg-[#FF2B44] text-white flex items-center justify-center mx-auto shadow-md">
-              <AlertCircle className="w-8 h-8 stroke-[2.5]" />
-            </div>
-
-            <span className="inline-block px-3.5 py-1.5 rounded-full bg-white text-[#E11D48] border border-[#FECDD3] text-xs sm:text-sm font-extrabold uppercase tracking-wider shadow-sm">
-              Metade concluída · Faltam 4 situações
-            </span>
-
-            <p className="text-xl sm:text-2xl font-extrabold leading-snug text-[#1C1917] max-w-md mx-auto">
-              “{QUIZ_BREATHER_AFTER_P4.text}”
-            </p>
-
-            <div className="pt-2">
-              <PillButton
-                variant="primary"
-                size="lg"
-                fullWidthMobile
-                onClick={() =>
-                  setState((prev) => ({
-                    ...prev,
-                    currentStage: 'questions',
-                    currentQuestionIdx: 4,
-                    showingFeedback: false,
-                  }))
-                }
-                className="w-full"
-              >
-                {QUIZ_BREATHER_AFTER_P4.ctaText}
-              </PillButton>
-            </div>
-          </div>
-        )}
-
-
 
         {/* ==================================================================
             TELA DE PREPARO (3 SEGUNDOS — Honesta, sem falsa análise)

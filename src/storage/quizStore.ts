@@ -126,7 +126,7 @@ export interface QuizComputedSummary {
 }
 
 function formatNaturalList(items: string[]): string {
-  if (items.length === 0) return 'nenhuma das 8 situações do teste';
+  if (items.length === 0) return 'nenhuma das 5 situações do teste';
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} e ${items[1]}`;
   return `${items.slice(0, -1).join(', ')} e ${items[items.length - 1]}`;
@@ -161,7 +161,7 @@ export function computeQuizSummary(state: QuizState): QuizComputedSummary {
   }
 
   const band: ResultBand =
-    acertos <= 3 ? 'r1' : acertos <= 6 ? 'r2' : 'r3';
+    acertos <= 2 ? 'r1' : acertos <= 4 ? 'r2' : 'r3';
 
   const nome = state.lead?.name?.trim()
     ? state.lead.name.trim().split(' ')[0]
@@ -174,18 +174,18 @@ export function computeQuizSummary(state: QuizState): QuizComputedSummary {
 
   let bandMessage = '';
   if (band === 'r1') {
-    bandMessage = `Você acertou ${acertos} de 8. E isso não diz nada sobre você como mãe. Diz sobre o que ninguém ensina: não se aprende isso na maternidade, na escola ou no pré-natal. Nas situações em que você errou (${listaErrosText}), a ação escolhida poderia atrapalhar ou atrasar o socorro. Acontece com muita gente, porque essas condutas são contraintuitivas. E ${quemCuida} também precisaria saber. A boa notícia: isso se aprende em poucos minutos e se consulta na hora.`;
+    bandMessage = `Você acertou ${acertos} de 5. E isso não diz nada sobre você como mãe. Diz sobre o que ninguém ensina: não se aprende isso na maternidade, na escola ou no pré-natal. Nas situações em que você errou (${listaErrosText}), a ação escolhida poderia atrapalhar ou atrasar o socorro. Acontece com muita gente, porque essas condutas são contraintuitivas. E ${quemCuida} também precisaria saber. A boa notícia: isso se aprende em poucos minutos e se consulta na hora.`;
   } else if (band === 'r2') {
-    bandMessage = `Você acertou ${acertos} de 8. Você sabe parte, e a parte que falta pesa. Quem sabe só parte tende a confiar demais justamente onde erra, e você errou em ${listaErrosText}. Mesmo nas que acertou, saber a resposta não é o mesmo que executar sob pressão: no susto, o nervosismo apaga a memória. Com o pronto-socorro ${tempoHospital}, os primeiros minutos dependem de quem está ao lado dele.`;
+    bandMessage = `Você acertou ${acertos} de 5. Você sabe parte, e a parte que falta pesa. Quem sabe só parte tende a confiar demais justamente onde erra, e você errou em ${listaErrosText}. Mesmo nas que acertou, saber a resposta não é o mesmo que executar sob pressão: no susto, o nervosismo apaga a memória. Com o pronto-socorro ${tempoHospital}, os primeiros minutos dependem de quem está ao lado dele.`;
   } else {
-    bandMessage = `Você acertou ${acertos} de 8. Você está bem à frente. Mas pergunte a si mesma: se o susto acontecer de verdade, você lembraria de tudo isso sob pressão? E ${quemCuida} sabe o mesmo? O quiz não cobriu anafilaxia, picadas, intoxicação por remédios nem RCP em bebê. O guia funciona como memória de apoio para você e para quem cuida dele.`;
+    bandMessage = `Você acertou ${acertos} de 5. Você está bem à frente. Mas pergunte a si mesma: se o susto acontecer de verdade, você lembraria de tudo isso sob pressão? E ${quemCuida} sabe o mesmo? O quiz não cobriu anafilaxia, picadas, intoxicação por remédios nem RCP em bebê. O guia funciona como memória de apoio para você e para quem cuida dele.`;
   }
 
   return {
     hasData,
     nome,
     acertos,
-    errosCount: 8 - acertos,
+    errosCount: SCORED_QUESTIONS.length - acertos,
     band,
     listaErrosText,
     wrongDetails,

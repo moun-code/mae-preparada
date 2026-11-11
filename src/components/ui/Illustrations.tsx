@@ -28,10 +28,10 @@ export function QuizQuestionIllustration({
 }) {
   const imageMap: Record<string, string> = {
     P1: '/images/quiz/p1-engasgo.webp',
-    P2: '/images/quiz/p2-leite.webp',
-    P3: '/images/quiz/p3-queimadura.webp',
-    P4: '/images/quiz/p4-limpeza.webp',
-    P5: '/images/quiz/p5-convulsao.webp',
+    P2: '/images/quiz/p3-queimadura.webp',
+    P3: '/images/quiz/p4-limpeza.webp',
+    P4: '/images/quiz/p5-convulsao.webp',
+    P5: '/images/quiz/p8-queda.webp',
     P6: '/images/quiz/p6-pilha.webp',
     P7: '/images/quiz/p7-afogamento.webp',
     P8: '/images/quiz/p8-queda.webp',
@@ -39,10 +39,10 @@ export function QuizQuestionIllustration({
 
   const labelsMap: Record<string, string> = {
     P1: 'Engasgo grave no bebê',
-    P2: 'Tosse forte com leite',
-    P3: 'Primeiros socorros para queimadura',
-    P4: 'Intoxicação por produto de limpeza',
-    P5: 'Convulsão com febre',
+    P2: 'Primeiros socorros para queimadura',
+    P3: 'Intoxicação por produto de limpeza',
+    P4: 'Convulsão com febre',
+    P5: 'Queda com batida na cabeça',
     P6: 'Ingestão de pilha-botão',
     P7: 'Afogamento silencioso na banheira',
     P8: 'Queda com batida na cabeça',

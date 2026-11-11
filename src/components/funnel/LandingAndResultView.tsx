@@ -276,7 +276,7 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                 <span className="w-2 h-2 rounded-full bg-[var(--mint-400)]" />
                 <span>
                   {summary.nome ? `${summary.nome}, você` : 'Você'} acertou{' '}
-                  <strong>{summary.acertos} de 8</strong> · Para revisar:{' '}
+                  <strong>{summary.acertos} de 5</strong> · Para revisar:{' '}
                   <strong>{summary.listaErrosText}</strong>
                 </span>
               </div>
@@ -292,7 +292,7 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
 
                 {mode === 'resultado' ? (
                   <h1 className="font-extrabold text-[var(--indigo-900)] tracking-tight leading-[1.08] text-[clamp(1.75rem,5.2vw,3.3rem)]">
-                    Você acertou {acertos} de 8. Transforme{' '}
+                    Você acertou {acertos} de 5. Transforme{' '}
                     <Em>dúvida</Em> em passo a passo.
                   </h1>
                 ) : (
@@ -425,13 +425,13 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                           strokeWidth="10"
                           strokeLinecap="round"
                           strokeDasharray={314}
-                          strokeDashoffset={314 - (314 * acertos) / 8}
+                          strokeDashoffset={314 - (314 * acertos) / 5}
                           className="transition-all duration-700 ease-out"
                         />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <span className="text-2xl sm:text-3xl font-extrabold text-[#FF2B44]">
-                          {acertos} de 8
+                          {acertos} de 5
                         </span>
                         <span className="text-[11px] font-bold uppercase tracking-wider text-[#57534E]">
                           Acertos
@@ -445,7 +445,7 @@ export function LandingAndResultView({ mode }: LandingAndResultViewProps) {
                       Seu diagnóstico
                     </span>
                     <h2 className="text-xl sm:text-3xl font-extrabold leading-tight text-[#1C1917]">
-                      {nomePrefix}você acertou {acertos} de 8 situações.
+                      {nomePrefix}você acertou {acertos} de 5 situações.
                     </h2>
                     <p className="text-sm sm:text-base text-[#44403C] leading-relaxed font-medium">
                       {summary?.bandMessage}

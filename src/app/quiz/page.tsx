@@ -10,7 +10,7 @@ import { QuizExperience } from '@/components/funnel/QuizExperience';
 export const metadata: Metadata = {
   title: 'Teste Rápido de Preparo Familiar (2 minutos)',
   description:
-    '8 situações reais em 2 minutos. Descubra onde você já está preparada e onde ainda há lacunas para revisar.',
+    '5 situações reais em 1 minuto e meio. Descubra onde você já está preparada e onde ainda há lacunas para revisar.',
   robots: {
     index: false,
     follow: false,

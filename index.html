@@ -189,14 +189,14 @@
                   <circle id="res-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="#FF2B44" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="117" />
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center">
-                  <span id="res-score-badge" class="text-2xl sm:text-3xl font-extrabold text-[#FF2B44]">5 de 8</span>
+                  <span id="res-score-badge" class="text-2xl sm:text-3xl font-extrabold text-[#FF2B44]">3 de 5</span>
                   <span class="text-[10px] font-bold uppercase tracking-wider text-[#667085]">Acertos</span>
                 </div>
               </div>
             </div>
             <div class="lg:col-span-8 space-y-2.5">
               <span class="inline-block px-3 py-1 rounded-full bg-[#FF2B44] text-white text-xs font-extrabold uppercase shadow-sm">Seu Diagnóstico Personalizado</span>
-              <h2 id="res-headline" class="text-xl sm:text-3xl font-extrabold text-[#121316]">Você acertou 5 de 8 situações.</h2>
+              <h2 id="res-headline" class="text-xl sm:text-3xl font-extrabold text-[#121316]">Você acertou 3 de 5 situações.</h2>
               <p id="res-band-text" class="text-sm sm:text-base text-[#44403C] leading-relaxed font-medium">
                 Você sabe parte, e a parte que falta pesa. Mesmo nas que acertou, saber a resposta não é o mesmo que executar sob pressão: no susto, o nervosismo apaga a memória.
               </p>
@@ -960,14 +960,14 @@
         badge.textContent = 'Diagnóstico Rápido · 2 min';
         box.innerHTML = `
           <div class="rounded-[24px] bg-white p-6 sm:p-8 border border-[#3A2390]/15 shadow-lg space-y-4 animate-fade-up">
-            <span class="inline-block px-3 py-1 rounded-full bg-[#EEF0FF] text-[#2A1A73] text-xs font-extrabold">⏱ Diagnóstico Interativo · 8 Situações Reais</span>
+            <span class="inline-block px-3 py-1 rounded-full bg-[#EEF0FF] text-[#2A1A73] text-xs font-extrabold">⏱ Diagnóstico Interativo · 5 Situações Reais</span>
             <div class="w-full overflow-hidden rounded-2xl border-2 border-[#3A2390]/15 bg-white shadow-sm flex items-center justify-center p-2">
               <img src="public/images/quiz/intro.webp" onerror="this.onerror=null; this.src='images/quiz/intro.webp';" alt="Mãe Preparada: Segundos que Salvam" class="max-h-52 sm:max-h-60 w-auto object-contain rounded-xl select-none" />
             </div>
             <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight">Você saberia o que fazer nos <span class="em-mint">primeiros minutos</span> de uma emergência com seu(sua) filho(a)?</h1>
-            <p class="text-sm sm:text-base text-[#5A5683] font-medium">8 situações reais. 2 minutos. Você descobre onde já está preparada e onde ainda não.</p>
+            <p class="text-sm sm:text-base text-[#5A5683] font-medium">5 situações reais. 1 minuto e meio. Você descobre onde já está preparada e onde ainda há lacunas.</p>
             <div class="rounded-2xl bg-[#F1F3F6] p-3.5 border border-[#E2E5EB] flex items-center justify-between gap-3">
-              <div class="text-xs font-bold text-[#121316]">Engasgo · Leite · Queimadura · Limpeza · Convulsão · Pilha-botão · Banheira · Queda</div>
+              <div class="text-xs font-bold text-[#121316]">Engasgo · Queimadura · Limpeza · Convulsão · Queda</div>
               <span class="px-2.5 py-1 rounded-xl bg-[#FF2B44] text-white text-xs font-extrabold shrink-0 shadow-sm">192</span>
             </div>
             <button onclick="startQuiz()" class="w-full min-h-[54px] rounded-full bg-[#FF2B44] text-white font-extrabold text-base px-6 py-3 flex items-center justify-between shadow-lg hover:brightness-95 transition">
@@ -1004,15 +1004,15 @@
 
       if (qState.stage === 'q') {
         const q = SCORED_QS[qState.qIdx];
-        bar.style.width = `${30 + ((qState.qIdx + 1) / 8) * 60}%`;
-        badge.innerHTML = `Pergunta ${q.idx} de 8 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
+        bar.style.width = `${30 + ((qState.qIdx + 1) / 5) * 60}%`;
+        badge.innerHTML = `Pergunta ${q.idx} de 5 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
         box.innerHTML = `
           <div class="space-y-5 sm:space-y-6 animate-fade-up">
             <div class="w-full overflow-hidden rounded-2xl border-2 border-[#E2E5EB] bg-white shadow-sm flex items-center justify-center p-2">
               <img src="${q.img}" onerror="this.onerror=null; this.src='${q.img.replace('public/', '')}';" alt="${q.title}" class="max-h-48 sm:max-h-56 w-auto object-contain rounded-xl select-none" />
             </div>
             <div class="space-y-2.5 pt-1 sm:pt-2">
-              <span class="inline-block px-3 py-1 rounded-lg bg-[#F1F3F6] text-[#121316] text-xs sm:text-sm font-extrabold uppercase">Situação ${q.idx} de 8 · ${q.title}</span>
+              <span class="inline-block px-3 py-1 rounded-lg bg-[#F1F3F6] text-[#121316] text-xs sm:text-sm font-extrabold uppercase">Situação ${q.idx} de 5 · ${q.title}</span>
               <h2 class="text-lg sm:text-2xl font-extrabold leading-snug sm:leading-relaxed text-[#121316]">${q.q}</h2>
             </div>
             <div class="space-y-3 pt-1 sm:pt-2">
@@ -1031,7 +1031,7 @@
         const q = SCORED_QS[qState.qIdx];
         const chosenIdx = qState.answers[q.id];
         const isOk = q.opts[chosenIdx]?.ok;
-        badge.innerHTML = `Pergunta ${q.idx} de 8 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
+        badge.innerHTML = `Pergunta ${q.idx} de 5 · <span class="px-2 py-0.5 rounded-full bg-[#F1F3F6] text-[#121316]">Lacunas: ${getGapsCount()}</span>`;
         box.innerHTML = `
           <div class="rounded-[24px] bg-white p-5 sm:p-7 border-2 border-[#E2E5EB] shadow-lg space-y-4 animate-fade-up">
             ${isOk
@@ -1155,19 +1155,19 @@
         });
       });
 
-      document.getElementById('res-score-badge').textContent = `${acertos} de 8`;
-      document.getElementById('res-ring-circle').setAttribute('stroke-dashoffset', String(314 - (314 * acertos) / 8));
+      document.getElementById('res-score-badge').textContent = `${acertos} de 5`;
+      document.getElementById('res-ring-circle').setAttribute('stroke-dashoffset', String(314 - (314 * acertos) / 5));
       const prefix = qState.name ? `${qState.name}, v` : 'V';
-      document.getElementById('res-headline').textContent = `${prefix}ocê acertou ${acertos} de 8 situações.`;
-      document.getElementById('hero-h1').innerHTML = `Você acertou ${acertos} de 8. Agora veja como transformar <span class="em-mint">dúvida</span> em passo a passo.`;
+      document.getElementById('res-headline').textContent = `${prefix}ocê acertou ${acertos} de 5 situações.`;
+      document.getElementById('hero-h1').innerHTML = `Você acertou ${acertos} de 5. Agora veja como transformar <span class="em-mint">dúvida</span> em passo a passo.`;
 
-      const errNames = wrongs.map(w => w.friendly).join(', ') || 'nenhuma das 8 situações';
-      if (acertos <= 3) {
-        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. E isso não diz nada sobre você como mãe. Diz sobre o que ninguém ensina na maternidade. Nas situações em que houve dúvida (${errNames}), a ação escolhida poderia atrasar o socorro. A boa notícia: isso se aprende em poucos minutos e se consulta na hora.`;
-      } else if (acertos <= 6) {
-        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. Você sabe parte, e a parte que falta (${errNames}) pesa. Mesmo nas que acertou, no susto o nervosismo apaga a memória. Os primeiros minutos dependem de quem está ao lado dele.`;
+      const errNames = wrongs.map(w => w.friendly).join(', ') || 'nenhuma das 5 situações';
+      if (acertos <= 2) {
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 5. E isso não diz nada sobre você como mãe. Diz sobre o que ninguém ensina na maternidade. Nas situações em que houve dúvida (${errNames}), a ação escolhida poderia atrasar o socorro. A boa notícia: isso se aprende em poucos minutos e se consulta na hora.`;
+      } else if (acertos <= 4) {
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 5. Você sabe parte, e a parte que falta (${errNames}) pesa. Mesmo nas que acertou, no susto o nervosismo apaga a memória. Os primeiros minutos dependem de quem está ao lado dele.`;
       } else {
-        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 8. Você está bem à frente! Mas pergunte a si mesma: sob pressão de verdade, você e quem cuida dele lembrariam de tudo? O guia funciona como memória de apoio rápida no celular e onde você precisar.`;
+        document.getElementById('res-band-text').textContent = `Você acertou ${acertos} de 5. Você está bem à frente! Mas pergunte a si mesma: sob pressão de verdade, você e quem cuida dele lembrariam de tudo? O guia funciona como memória de apoio rápida no celular e onde você precisar.`;
       }
 
       const cardsBox = document.getElementById('res-wrong-cards');
